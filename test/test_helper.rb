@@ -6,5 +6,8 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
-  # Add more helper methods to be used by all tests here...
+  def log_in_as(user_key)
+    post new_user_session_path, user: { email: users(user_key).email, password: '87654321' }
+    follow_redirect!
+  end
 end
