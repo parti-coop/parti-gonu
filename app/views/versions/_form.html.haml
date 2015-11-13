@@ -1,0 +1,7 @@
+.form-group
+  - Version.choices.keys.each do |choice|
+    = f.radio_button :choice, choice
+    = f.label choice.to_sym
+.form-group
+  = f.text_area :comment
+= f.submit

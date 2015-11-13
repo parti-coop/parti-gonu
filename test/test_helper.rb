@@ -10,4 +10,8 @@ class ActiveSupport::TestCase
     post new_user_session_path, user: { email: users(user_key).email, password: '87654321' }
     follow_redirect!
   end
+
+  def css_selector(model)
+    "##{ActionView::RecordIdentifier::dom_id(model)}"
+  end
 end

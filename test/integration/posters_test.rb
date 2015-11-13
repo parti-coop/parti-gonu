@@ -13,4 +13,9 @@ class PostersTest < ActionDispatch::IntegrationTest
     assert_equal users(:dali), assigns(:poster).user
     assert_redirected_to poster_path(assigns(:poster))
   end
+
+  test "anonymous" do
+    get poster_path(posters(:abc), auth: 1)
+    assert_redirected_to new_user_session_path
+  end
 end
