@@ -14,8 +14,8 @@ class PostersController < ApplicationController
       redirect_to new_user_session_path and return
     end
 
-    @current_user_stand = ((user_signed_in? and @poster.has_stand_of?(current_user)) ?
-      @poster.stand_of(current_user) : @poster.stands.build)
+    has_stand = (user_signed_in? and @poster.has_stand_of?(current_user))
+    @current_user_stand = (has_stand ? @poster.stand_of(current_user) : @poster.stands.build)
     @persisted_stands = @poster.stands.reject(&:new_record?)
   end
 

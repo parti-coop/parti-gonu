@@ -7,4 +7,12 @@ class Stand < ActiveRecord::Base
   def current_version
     versions.last
   end
+
+  def current_choice
+    current_version.choice
+  end
+
+  def assure_first_comment
+    current_version.comments.build if current_version.comments.empty?
+  end
 end

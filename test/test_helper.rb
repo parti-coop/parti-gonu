@@ -14,4 +14,22 @@ class ActiveSupport::TestCase
   def css_selector(model)
     "##{ActionView::RecordIdentifier::dom_id(model)}"
   end
+
+  def post_version(stand, choice, comment_body)
+    versions_attributes = make_versions_attributes choice, comment_body
+    versions_attributes[:comments_attributes] = {'0': {body: comment_body}} if comment_body.present?
+    post stand_versions_path(stand_id: stand, version: versions_attributes)
+  end
+
+  def post_stand(poster, choice, comment_body)
+    versions_attributes = make_versions_attributes choice, comment_body
+    versions_attributes[:comments_attributes] = {'0': {body: comment_body}} if comment_body.present?
+    post poster_stands_path(poster_id: poster, stand: {versions_attributes: {'0': versions_attributes}})
+  end
+
+  def make_versions_attributes(choice, comment_body)
+    versions_attributes = {choice: choice.to_s}
+    versions_attributes[:comments_attributes] = {'0': {body: comment_body}} if comment_body.present?
+    versions_attributes
+  end
 end

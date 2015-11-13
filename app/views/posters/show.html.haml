@@ -1,20 +1,32 @@
-%dl
-  %dt url
-  %dd= @poster.url
+%section
+  %ul
+    %li
+      url :
+      = @poster.url
 
 %section
   - if @persisted_stands.any?
     %p #{@persisted_stands.count}명이 이 글을 읽고 입장을 밝혀 주셨습니다.
 
-  - if user_signed_in? && @poster.has_stand_of?(current_user)
+  - if user_signed_in? and @poster.has_stand_of?(current_user)
     %ul
-      - @persisted_stands.each do |stand|
-        %li{id: dom_id(stand)}
+      - @poster.comments.latest.each do |comment|
+        %li{id: dom_id(comment)}
           %dl
             %dt choice
-            %dd= stand.current_version.try(:choice)
+            %dd
+              = comment.version.choice
+              - if comment.is_first?
+                - if comment.version.is_first?
+                  [최초 입장]
+                - else
+                  [입장 변경]
             %dt comment
-            %dd= stand.current_version.try(:comment)
+            %dd= comment.body
+            %dt user
+            %dd= comment.user.email
+            %dt created_at
+            %dd= comment.created_at
   - else
     %p
       다른 사람들의 입장을 살펴 보시기 전에 먼저
@@ -25,17 +37,16 @@
 %section
 - if user_signed_in?
   - if @poster.has_stand_of?(current_user)
-    %p 이 글에 대해 #{current_user.email}님은 #{@poster.stand_of(current_user).current_version.choice}입니다.
-    %p 이 글에 대한 나의 입장이 바뀌었습니다.
+    %p 이 글에 대해 #{current_user.email}는 #{@poster.stand_of(current_user).current_version.choice}합니다.
     = form_for [@current_user_stand, @current_user_stand.versions.build] do |f|
-      = render partial: 'shared/error_messages', locals: { object: f.object }
-      = render partial: 'versions/form', locals: {f: f}
+      = render partial: 'shared/error_messages', locals: {object: f.object}
+      = render partial: 'versions/form', locals: {poster: @poster, f: f}
   - else
-    %p 이 글에 대한 나의 입장은 이렇습니다.
+    %p 이 글에 대해 #{current_user.email}는 이런 입장입니다.
     = form_for [@poster, @current_user_stand] do |f|
       = render partial: 'shared/error_messages', locals: { object: @current_user_stand }
-      = f.fields_for :versions, @current_user_stand.versions.build do |f_v|
-        = render partial: 'versions/form', locals: {f: f_v}
+      = f.fields_for :versions, @current_user_stand.versions.build do |f_version|
+        = render partial: 'versions/form', locals: {poster: @poster, f: f_version}
 - else
   %p 이 글에 대한 당신의 입장은 무엇인가요?
   = link_to 'Log in', poster_path(@poster, auth: 1), class: 'btn btn-default'

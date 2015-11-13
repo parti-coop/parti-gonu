@@ -1,4 +1,3 @@
 stand1_v1:
-  choice: in_favor
-  comment: 'test'
+  choice: 1
   stand: stand1

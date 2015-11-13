@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   resources :posters do
     resources :stands, shallow: true do
-      resources :versions
+      resources :versions, shallow: true do
+        resources :comments, shallow: true
+      end
     end
   end
   #devise_for :users
