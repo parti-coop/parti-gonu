@@ -1,0 +1,13 @@
+%header.navbar.navbar-inverse.navbar-fixed-top
+  .container
+    .navbar-header
+      = link_to "Parti", root_path, class: 'navbar-brand'
+    %nav.navbar-right
+      - if user_signed_in?
+        %em.user--current__email.navbar-text= current_user.email
+        = link_to 'Create poster', new_poster_path, class: 'btn btn-success navbar-btn'
+        = link_to 'Log out', destroy_user_session_path, method: :delete, class: 'btn btn-default navbar-btn'
+      - else
+        = link_to 'Sign up', new_user_registration_path, class: 'btn btn-success navbar-btn'
+        = link_to 'Log in', new_user_session_path, class: 'btn btn-default navbar-btn'
+
