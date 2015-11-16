@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class StandsTest < ActionDispatch::IntegrationTest
-  fixtures :all
-
   test "first stands" do
     log_in_as(:dali)
 
@@ -45,6 +43,17 @@ class StandsTest < ActionDispatch::IntegrationTest
 
     post_version stand1, :in_favor, 'test'
     assert_equal 3, fetch_stand.versions.count
+  end
+
+  test "stands count" do
+    log_in_as(:dali)
+
+    refute posters(:abc).has_stand_of?(users(:dali))
+
+    first_count = posters(:abc).fetch_stand_count(:in_favor)
+
+    post_stand posters(:abc), :in_favor, 'test'
+    assert_equal first_count + 1, posters(:abc).reload.stands.count
   end
 
   def fetch_stand

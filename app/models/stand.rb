@@ -1,15 +1,15 @@
 class Stand < ActiveRecord::Base
+  include Choicable
+
   belongs_to :user
   belongs_to :poster
   has_many :versions
   accepts_nested_attributes_for :versions
 
+  scope :by_choice, -> (choice) { where(choice: choice) }
+
   def current_version
     versions.last
-  end
-
-  def current_choice
-    current_version.choice
   end
 
   def assure_first_comment

@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class PostersTest < ActionDispatch::IntegrationTest
-  fixtures :all
-
   test "new poster" do
     log_in_as(:dali)
 

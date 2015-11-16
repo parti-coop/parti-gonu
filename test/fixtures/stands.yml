@@ -1,3 +1,4 @@
 stand1:
   poster: abc
   user: rest515
+  choice: <%= Version.choices[:in_favor] %>

@@ -1,3 +1,4 @@
 abc:
   url: http://a.b.c
   user: dali
+  stand_in_favor_count: 1

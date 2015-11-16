@@ -1,12 +1,16 @@
 class Version < ActiveRecord::Base
+  include Choicable
+
   belongs_to :stand
   belongs_to :previous, class_name: Version
+  delegate :poster, to: :stand
   has_many :comments
   accepts_nested_attributes_for :comments
 
-  enum choice: { actively_support: 1, in_favor: 2, oppose: 3, block: 4 }
-
   validate :choice_check
+
+  after_create :update_poster_and_stand
+  after_create :update_stand
 
   def choice_check
     if !previous.nil? and previous.choice == self.choice
@@ -20,5 +24,22 @@ class Version < ActiveRecord::Base
 
   def is_first?
     previous.nil?
+  end
+
+  private
+
+  def update_poster_and_stand
+    update_stand
+    update_poster
+  end
+
+  def update_poster
+    poster.cache_all_stands_count
+    poster.save
+  end
+
+  def update_stand
+    stand.choice = self.choice
+    stand.save
   end
 end

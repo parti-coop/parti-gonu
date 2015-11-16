@@ -1,6 +1,7 @@
+= poster.stand_of(current_user).inspect
 .form-group
   - Version.choices.keys.each do |choice|
-    = f.radio_button :choice, choice, checked: poster.stand_of(current_user).try(:current_choice) == choice
+    = f.radio_button :choice, choice, checked: poster.stand_of(current_user).try(:choice) == choice
     = f.label choice.to_sym
 .form-group
   = f.fields_for :comments, f.object.comments.build do |f_comment|

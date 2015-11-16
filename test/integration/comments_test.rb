@@ -1,15 +1,13 @@
 require 'test_helper'
 
 class CommentsTest < ActionDispatch::IntegrationTest
-  fixtures :all
-
   test "add comment" do
     log_in_as(:dali)
 
     previous_version = stands(:stand1).current_version
     assert_equal versions(:stand1_v1), previous_version
 
-    post_version(stands(:stand1), stands(:stand1).current_choice, 'test')
+    post_version(stands(:stand1), stands(:stand1).choice, 'test')
 
     assert_equal 'test', assigns(:comment).body
 
@@ -17,9 +15,9 @@ class CommentsTest < ActionDispatch::IntegrationTest
     assert_equal previous_version, fetch_current_version
     assert_includes fetch_current_version().reload.comments, assigns(:comment).reload
 
-    refute_equal stands(:stand1).current_choice, 'in_favor'
+    refute_equal stands(:stand1).choice, 'block'
 
-    post_version(stands(:stand1), 'in_favor', 'test')
+    post_version(stands(:stand1), 'block', 'test')
 
     assert_equal 'test', assigns(:comment).body
 
