@@ -1,6 +1,6 @@
 module Choicable
   extend ActiveSupport::Concern
   included do
-    enum choice: { actively_support: 1, in_favor: 2, oppose: 3, block: 4 }
+    enum choice: { in_favor: 1, oppose: 2, abstain: 3 }
   end
 end

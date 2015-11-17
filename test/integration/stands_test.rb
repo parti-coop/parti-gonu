@@ -32,7 +32,7 @@ class StandsTest < ActionDispatch::IntegrationTest
     stand1 = fetch_stand
     assert_equal 1, stand1.versions.count
 
-    post_version stand1, :block, 'test'
+    post_version stand1, :oppose, 'test'
     stand2 = fetch_stand
     assert_equal stand1.id, stand2.id
     assert_equal 2, stand2.versions.count

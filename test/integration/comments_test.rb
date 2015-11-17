@@ -15,9 +15,9 @@ class CommentsTest < ActionDispatch::IntegrationTest
     assert_equal previous_version, fetch_current_version
     assert_includes fetch_current_version().reload.comments, assigns(:comment).reload
 
-    refute_equal stands(:stand1).choice, 'block'
+    refute_equal stands(:stand1).choice, 'oppose'
 
-    post_version(stands(:stand1), 'block', 'test')
+    post_version(stands(:stand1), 'oppose', 'test')
 
     assert_equal 'test', assigns(:comment).body
 
