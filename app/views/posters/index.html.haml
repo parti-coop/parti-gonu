@@ -1,7 +1,9 @@
-.section
-  .row
-    - @posters.each do |poster|
-      .panel.panel-default
-        .panel-body= link_to poster.url, poster
+%section.breadcrumb-wrapper
+  %ol.breadcrumb
+    %li= link_to 'Home', root_path
+
+%section
+  - @posters.each do |poster|
+    = render poster
 
 

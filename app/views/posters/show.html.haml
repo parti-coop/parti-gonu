@@ -1,8 +1,10 @@
+%section.breadcrumb-wrapper
+  %ol.breadcrumb
+    %li= link_to 'Home', root_path
+    %li.active= @poster.title
+
 %section
-  %ul
-    %li
-      url :
-      = @poster.url
+  = render @poster
 
 %section
   - if @persisted_stands.any?

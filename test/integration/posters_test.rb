@@ -16,4 +16,13 @@ class PostersTest < ActionDispatch::IntegrationTest
     get poster_path(posters(:abc), auth: 1)
     assert_redirected_to new_user_session_path
   end
+
+  test "meta attributes" do
+    log_in_as(:dali)
+
+    post posters_path(poster: { url: 'http://ogp.me'})
+    assert_equal 'Open Graph protocol', assigns(:poster).title
+    assert_equal 'The Open Graph protocol enables any web page to become a rich object in a social graph.',
+                 assigns(:poster).description
+  end
 end

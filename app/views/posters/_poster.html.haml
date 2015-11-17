@@ -1,0 +1,13 @@
+.panel.panel-default
+  .panel-heading
+    %h4
+      = link_to_if current_page?(action: :index), poster.title, poster
+      %small= link_to poster.url, poster.url
+  .panel-body
+    = link_to_if current_page?(action: :index), poster.description, poster
+    = link_to "[더보기]", poster.url
+  .panel-footer
+    %span.text-muted.pull-right
+      = poster.user.email
+      님이 붙인 대자보입니다.
+    .clearfix

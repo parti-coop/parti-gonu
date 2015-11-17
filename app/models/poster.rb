@@ -4,6 +4,10 @@ class Poster < ActiveRecord::Base
   has_many :versions, through: :stands
   has_many :comments, through: :versions
 
+  default_scope { order(created_at: :desc) }
+
+  before_create :setup_meta
+
   def has_stand_of?(user)
     stands.exists?(user: user)
   end
@@ -30,5 +34,11 @@ class Poster < ActiveRecord::Base
 
   def stand_count_field(choice)
     "stand_#{choice}_count"
+  end
+
+  def setup_meta
+    og = LinkThumbnailer.generate(self.url)
+    self.title = og.title
+    self.description = og.description
   end
 end
