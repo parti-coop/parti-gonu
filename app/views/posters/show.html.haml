@@ -37,11 +37,11 @@
         %span.label(class="label-#{@poster.stand_of(current_user).choice}")= @poster.stand_of(current_user).choice
         입니다. 내 입장을 살펴보려면
         = link_to '여기', @poster.stand_of(current_user)
-        를 클릭해 주세요.
+        를 클릭합니다.
 - else
-  %section
-    %h4 현황
-    - if @persisted_stands.any?
+  - if @persisted_stands.any?
+    %section
+      %h4 현황
       %p 이 글을 읽고 #{@persisted_stands.count}분이 입장을 밝혀 주셨습니다.
 %section
   %h4 입장

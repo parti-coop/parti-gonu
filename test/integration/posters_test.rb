@@ -2,8 +2,6 @@ require 'test_helper'
 
 class PostersTest < ActionDispatch::IntegrationTest
   test "new poster" do
-    skip
-
     log_in_as(:dali)
 
     get new_poster_path
@@ -20,13 +18,21 @@ class PostersTest < ActionDispatch::IntegrationTest
   end
 
   test "meta attributes" do
-    skip
-
     log_in_as(:dali)
 
     post posters_path(poster: { url: 'http://ogp.me'})
     assert_equal 'Open Graph protocol', assigns(:poster).title
     assert_equal 'The Open Graph protocol enables any web page to become a rich object in a social graph.',
                  assigns(:poster).description
+  end
+
+  focus
+  test "related poster" do
+    log_in_as(:dali)
+
+    post posters_path(poster: { url: 'http://daum.net', relatings_attributes: { '0': { relating_id: posters(:abc) }}})
+    assert_includes assigns(:poster).relatable_posters, posters(:abc)
+    relating_poster = assigns(:poster).relatable_posters[0]
+    assert_includes relating_poster.relatable_posters, assigns(:poster)
   end
 end

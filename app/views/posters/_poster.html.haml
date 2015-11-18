@@ -1,13 +1,28 @@
 .panel.panel-default
   .panel-heading
+    .pull-right
+      - if current_page?(controller: :posters, action: :show, id: poster)
+        = link_to '대자보 연결하기', new_poster_path(relating_poster_id: poster), class: 'btn btn-default'
     %h4
       = link_to_if !current_page?(controller: :posters, action: :show, id: poster), poster.title, poster
       %small= link_to poster.url, poster.url
   .panel-body
     = link_to_if !current_page?(controller: :posters, action: :show, id: poster), poster.description, poster
     = link_to "[더보기]", poster.url
+  - if poster.relatable_posters.any?
+    .panel-body
+      %h5 연결 대자보
+      %ul
+      - poster.relatable_posters.each do |relatable|
+        %li
+          = link_to relatable.title, relatable
+          %span.text_muted
+            \-
+            %i.glyphicon.glyphicon-user
+            = relatable.user.email
   .panel-footer
     %span.text-muted.pull-right
+      %i.glyphicon.glyphicon-user
       = poster.user.email
       님이 붙인 대자보입니다.
     .clearfix

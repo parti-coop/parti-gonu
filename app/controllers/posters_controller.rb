@@ -25,12 +25,13 @@ class PostersController < ApplicationController
     @poster = Poster.new(create_params)
     @poster.user = current_user
     @poster.save!
+
     redirect_to @poster
   end
 
   private
 
   def create_params
-    params.require(:poster).permit([:url])
+    params.require(:poster).permit(:url, relatings_attributes: [ :relating_id ] )
   end
 end

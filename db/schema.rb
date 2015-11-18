@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151118180603) do
+ActiveRecord::Schema.define(version: 20151118200145) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "body",       limit: 65535
@@ -36,6 +36,16 @@ ActiveRecord::Schema.define(version: 20151118180603) do
 
   add_index "posters", ["url"], name: "index_posters_on_url", using: :btree
   add_index "posters", ["user_id"], name: "index_posters_on_user_id", using: :btree
+
+  create_table "relatables", force: :cascade do |t|
+    t.integer  "relating_id", limit: 4, null: false
+    t.integer  "related_id",  limit: 4, null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "relatables", ["related_id"], name: "index_relatables_on_related_id", using: :btree
+  add_index "relatables", ["relating_id", "related_id"], name: "index_relatables_on_relating_id_and_related_id", unique: true, using: :btree
 
   create_table "stands", force: :cascade do |t|
     t.integer  "user_id",    limit: 4, null: false

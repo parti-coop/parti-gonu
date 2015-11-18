@@ -1,4 +1,7 @@
 = form_for @poster do |f|
   = f.text_field :url
+  - if params[:relating_poster_id]
+    = f.fields_for :relatings, @poster.relatings.build do |f_relating|
+      = f_relating.hidden_field :relating_id, value: params[:relating_poster_id]
   = f.submit
 
