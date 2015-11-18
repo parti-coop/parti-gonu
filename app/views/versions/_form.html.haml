@@ -1,7 +1,7 @@
 .form-group
   - Version.choices.keys.each do |choice|
-    = f.radio_button :choice, choice, checked: (stand.has_changes? and stand.previous_version.choice == choice)
+    = f.radio_button :choice, choice, checked: (previous_version.present? and previous_version.choice == choice)
     = f.label choice.to_sym
 .form-group
-  = f.text_area :reason, value: (stand.previous_version.reason if stand.has_changes?), cols: 100, rows: 5
+  = f.text_area :reason, value: (previous_version.reason if previous_version.present?), cols: 100, rows: 5
 = f.submit

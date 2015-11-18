@@ -16,7 +16,7 @@ class Stand < ActiveRecord::Base
   scope :by_choice, -> (choice) { where(choice: choice) }
 
   def current_version
-    versions.last
+    versions.offset(0).last
   end
 
   def previous_version

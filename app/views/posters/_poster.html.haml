@@ -1,10 +1,10 @@
 .panel.panel-default
   .panel-heading
     %h4
-      = link_to_if current_page?(action: :index), poster.title, poster
+      = link_to_if !current_page?(controller: :posters, action: :show, id: poster), poster.title, poster
       %small= link_to poster.url, poster.url
   .panel-body
-    = link_to_if current_page?(action: :index), poster.description, poster
+    = link_to_if !current_page?(controller: :posters, action: :show, id: poster), poster.description, poster
     = link_to "[더보기]", poster.url
   .panel-footer
     %span.text-muted.pull-right

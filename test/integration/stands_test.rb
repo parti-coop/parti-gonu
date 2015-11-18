@@ -24,6 +24,22 @@ class StandsTest < ActionDispatch::IntegrationTest
     assert_equal 'in_favor', stand.current_version.choice
   end
 
+  test "stand page" do
+    log_in_as(:dali)
+
+    refute posters(:abc).has_stand_of?(users(:dali))
+    assert posters(:abc).stands.any?
+
+    get stand_path(stands(:stand1))
+    assert_redirected_to poster_path(posters(:abc))
+
+    post_stands posters(:abc), :in_favor, 'test'
+    assigns(:stand).reload
+
+    get stand_path(stands(:stand1))
+    assert_response :success
+  end
+
   test "stands versions" do
     log_in_as(:dali)
 

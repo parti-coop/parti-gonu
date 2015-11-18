@@ -2,7 +2,7 @@
   .panel-heading
     .text-muted.pull-right
       = link_to('고치기', edit_stand_path(stand), class: 'btn btn-default btn-xs') if current_user == stand.user
-      = stand.updated_at
+      = link_to stand.updated_at, stand
     %i.glyphicon.glyphicon-user
     = stand.user.email
     은
@@ -11,11 +11,20 @@
       %i.glyphicon.glyphicon-arrow-right
     %span.label(class="label-#{stand.choice}")= stand.choice
     합니다.
-  .panel-body(style="white-space: pre;")= preserve stand.reason
+
   .panel-body
-    .panel.panel-default
-      %ul.list-group
+    %h5 이유는 아래와 같습니다.
+    %p(style="white-space: pre;")= preserve stand.reason
+
+  %ul.list-group
+    %li.list-group-item
+      = render partial: 'comments/form', locals: { stand: stand }
+    - if current_page?(controller: :stands, action: :show, id: stand)
+      - stand.statuses.each do |status|
+        = render status
+    - else
+      - stand.statuses.first(2).each do |status|
+        = render status
+      - if stand.statuses.size > 2
         %li.list-group-item
-          = render partial: 'comments/form', locals: { stand: stand }
-        - stand.statuses.each do |status|
-          = render status
+          = link_to '더보기 >>', stand

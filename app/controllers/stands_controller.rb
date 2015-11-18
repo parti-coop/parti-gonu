@@ -1,4 +1,13 @@
 class StandsController < ApplicationController
+  def show
+    @stand = Stand.find(params[:id])
+    @poster = @stand.poster
+
+    if !user_signed_in? or !@poster.has_stand_of? current_user
+      redirect_to @poster and return
+    end
+  end
+
   def edit
     @stand = Stand.find(params[:id])
   end
@@ -9,7 +18,7 @@ class StandsController < ApplicationController
     @stand.user = current_user
     @stand.save
     flash[:error] = @stand.errors.full_messages.to_sentence if @stand.errors.any?
-    redirect_to @poster
+    redirect_to @stand
   end
 
   def update
@@ -29,7 +38,7 @@ class StandsController < ApplicationController
     errors << @version.errors.full_messages.to_sentence if @version.present? and @version.errors.any?
     flash[:error] = errors.join
 
-    redirect_to @stand.poster
+    redirect_to @stand
   end
 
   private

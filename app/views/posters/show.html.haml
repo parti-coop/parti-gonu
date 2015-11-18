@@ -8,7 +8,12 @@
 
 %section
   - if @persisted_stands.any?
-    %p #{@persisted_stands.count}명이 이 글을 읽고 입장을 밝혀 주셨습니다.
+    %p
+      이 글을 읽고 #{@persisted_stands.count}분이 입장을 밝혀 주셨습니다.
+      - if user_signed_in? and @poster.has_stand_of?(current_user)
+        내 입장을 보려면
+        = link_to '여기', @poster.stand_of(current_user)
+        를 클릭해 주세요.
 
   - if user_signed_in?
     - if @poster.has_stand_of?(current_user)

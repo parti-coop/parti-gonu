@@ -1,0 +1,14 @@
+%section.breadcrumb-wrapper
+  %ol.breadcrumb
+    %li= link_to 'Home', root_path
+    %li= link_to @poster.title, @poster
+    %li.active
+      = @stand.user.email
+      의 입장
+
+%section
+  = render @poster
+
+%section
+  = render @stand
+
