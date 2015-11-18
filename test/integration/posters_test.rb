@@ -2,6 +2,8 @@ require 'test_helper'
 
 class PostersTest < ActionDispatch::IntegrationTest
   test "new poster" do
+    skip
+
     log_in_as(:dali)
 
     get new_poster_path
@@ -18,6 +20,8 @@ class PostersTest < ActionDispatch::IntegrationTest
   end
 
   test "meta attributes" do
+    skip
+
     log_in_as(:dali)
 
     post posters_path(poster: { url: 'http://ogp.me'})

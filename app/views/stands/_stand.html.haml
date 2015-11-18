@@ -4,8 +4,11 @@
       = link_to('고치기', edit_stand_path(stand), class: 'btn btn-default btn-xs') if current_user == stand.user
       = link_to stand.updated_at, stand
     %i.glyphicon.glyphicon-user
-    = stand.user.email
-    은
+    - if current_user == stand.user
+      나는
+    - else
+      = stand.user.email
+      은
     - if stand.current_version.change_choice?
       %span.label(class="label-#{stand.previous_version.choice}")= stand.previous_version.choice
       %i.glyphicon.glyphicon-arrow-right

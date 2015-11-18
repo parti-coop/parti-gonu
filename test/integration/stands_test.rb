@@ -67,17 +67,6 @@ class StandsTest < ActionDispatch::IntegrationTest
     assert_equal version, assigns(:version).previous
   end
 
-  test "stands count" do
-    log_in_as(:dali)
-
-    refute posters(:abc).has_stand_of?(users(:dali))
-
-    first_count = posters(:abc).fetch_stand_count(:in_favor)
-
-    post_stands posters(:abc), :in_favor, 'test'
-    assert_equal first_count + 1, posters(:abc).reload.stands.count
-  end
-
   def fetch_stand
     posters(:abc).stand_of(users(:dali))
   end

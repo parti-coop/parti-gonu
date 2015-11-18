@@ -17,6 +17,8 @@ class PostersController < ApplicationController
     has_stand = (user_signed_in? and @poster.has_stand_of?(current_user))
     @current_user_stand = (has_stand ? @poster.stand_of(current_user) : @poster.stands.build)
     @persisted_stands = @poster.stands.latest.reject(&:new_record?)
+    @persisted_in_favor_stands = @persisted_stands.select(&:in_favor?)
+    @persisted_oppose_stands = @persisted_stands.select(&:oppose?)
   end
 
   def create

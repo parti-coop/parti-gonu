@@ -7,7 +7,6 @@ class Version < ActiveRecord::Base
 
   scope :latest, ->{ order(id: :desc) }
 
-  after_create :update_poster_and_stand
   after_create :update_stand
 
   def user
@@ -31,16 +30,6 @@ class Version < ActiveRecord::Base
   end
 
   private
-
-  def update_poster_and_stand
-    update_stand
-    update_poster
-  end
-
-  def update_poster
-    poster.cache_all_stands_count
-    poster.save
-  end
 
   def update_stand
     stand.choice = self.choice

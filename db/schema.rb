@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151118091134) do
+ActiveRecord::Schema.define(version: 20151118152817) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "body",       limit: 65535
@@ -25,17 +25,13 @@ ActiveRecord::Schema.define(version: 20151118091134) do
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "posters", force: :cascade do |t|
-    t.string   "url",                          limit: 255,               null: false
-    t.integer  "user_id",                      limit: 4,                 null: false
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
-    t.integer  "stand_actively_support_count", limit: 4,     default: 0, null: false
-    t.integer  "stand_in_favor_count",         limit: 4,     default: 0, null: false
-    t.integer  "stand_oppose_count",           limit: 4,     default: 0, null: false
-    t.integer  "stand_block_count",            limit: 4,     default: 0, null: false
-    t.text     "title",                        limit: 65535
-    t.text     "description",                  limit: 65535
-    t.string   "image",                        limit: 255
+    t.string   "url",         limit: 255,   null: false
+    t.integer  "user_id",     limit: 4,     null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.text     "title",       limit: 65535
+    t.text     "description", limit: 65535
+    t.string   "image",       limit: 255
   end
 
   add_index "posters", ["url"], name: "index_posters_on_url", using: :btree

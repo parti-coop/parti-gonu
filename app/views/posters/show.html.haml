@@ -6,15 +6,45 @@
 %section
   = render @poster
 
-%section
-  - if @persisted_stands.any?
-    %p
-      이 글을 읽고 #{@persisted_stands.count}분이 입장을 밝혀 주셨습니다.
-      - if user_signed_in? and @poster.has_stand_of?(current_user)
-        내 입장을 보려면
+- if user_signed_in? and @poster.has_stand_of?(current_user)
+  %section
+    %h4 현황
+    .panel.panel-default
+      .panel-heading
+        이 글을 읽고 #{@persisted_stands.count}분이 입장을 밝혀 주셨습니다.
+      .panel-body
+        .row
+          .col-xs-5
+            %span.label.label-in_favor
+              in_favor
+              \:
+              = @persisted_in_favor_stands.count
+            .pull-right
+              = @persisted_in_favor_stands.first(3).map { |s| s.user.email }.join(', ')
+              = "..." if @persisted_in_favor_stands.count > 2
+          .col-xs-2
+            .text-center VS
+          .col-xs-5
+            = @persisted_oppose_stands.first(3).map { |s| s.user.email }.join(', ')
+            .pull-right
+              = "..." if @persisted_oppose_stands.count > 3
+              %span.label.label-oppose
+                = @persisted_oppose_stands.count
+                \:
+                oppose
+      .panel-footer
+        내 입장은
+        %span.label(class="label-#{@poster.stand_of(current_user).choice}")= @poster.stand_of(current_user).choice
+        입니다. 내 입장을 살펴보려면
         = link_to '여기', @poster.stand_of(current_user)
         를 클릭해 주세요.
-
+- else
+  %section
+    %h4 현황
+    - if @persisted_stands.any?
+      %p 이 글을 읽고 #{@persisted_stands.count}분이 입장을 밝혀 주셨습니다.
+%section
+  %h4 입장
   - if user_signed_in?
     - if @poster.has_stand_of?(current_user)
       - @persisted_stands.each do |stand|
@@ -26,7 +56,6 @@
           #{current_user.email}님의
         입장을 밝혀 주세요.
         = render partial: 'stands/form', locals: {stand: @current_user_stand}
-
   - else
     %p 다른 사람들의 입장을 살펴 보시기 전에 먼저 로그인해 주세요.
     = link_to 'Log in', poster_path(@poster, auth: 1), class: 'btn btn-default'

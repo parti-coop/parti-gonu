@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
 
     flash[:error] = @comment.errors.full_messages.to_sentence if @comment.errors.any?
 
-    redirect_to @stand
+    redirect_to @stand.poster
   end
 
   private

@@ -13,7 +13,6 @@ class Stand < ActiveRecord::Base
   accepts_nested_attributes_for :versions
 
   scope :latest, ->{ order(updated_at: :desc) }
-  scope :by_choice, -> (choice) { where(choice: choice) }
 
   def current_version
     versions.offset(0).last

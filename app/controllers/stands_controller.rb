@@ -16,9 +16,11 @@ class StandsController < ApplicationController
     @poster = Poster.find(params[:poster_id])
     @stand = @poster.stands.build(create_params)
     @stand.user = current_user
+
     @stand.save
+
     flash[:error] = @stand.errors.full_messages.to_sentence if @stand.errors.any?
-    redirect_to @stand
+    redirect_to @stand.poster
   end
 
   def update
@@ -28,9 +30,11 @@ class StandsController < ApplicationController
     version_params = update_params[:versions_attributes]['0']
     unless previous.same? version_params
       @stand.assign_attributes(update_params)
+      @stand.touch
       @version = @stand.versions.last
       @version.previous = previous
     end
+
     @stand.save
 
     errors = []
@@ -38,7 +42,7 @@ class StandsController < ApplicationController
     errors << @version.errors.full_messages.to_sentence if @version.present? and @version.errors.any?
     flash[:error] = errors.join
 
-    redirect_to @stand
+    redirect_to @stand.poster
   end
 
   private

@@ -1,3 +1,6 @@
 stand1_v1:
   choice: <%= Version.choices[:in_favor] %>
   stand: stand1
+stand2_v1:
+  choice: <%= Version.choices[:oppose] %>
+  stand: stand2
