@@ -1,0 +1,17 @@
+%li.list-group-item
+  .list-group-item-heading
+    %i.glyphicon.glyphicon-user
+    = support.stand.user.email
+    %span.label(class="label-#{support.stand.choice}")= support.stand.choice
+  .list-group-item-text
+    - if stand == support.target
+      이
+      = support.target.user.email
+      님의 입장을 지지합니다.
+    - else
+      = link_to support.target do
+        = support.target.user.email
+        님의 입장
+      을 지지합니다.
+
+

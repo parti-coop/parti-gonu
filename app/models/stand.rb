@@ -9,6 +9,12 @@ class Stand < ActiveRecord::Base
       collect{ |comment| comment if comment.persisted? }
     end
   end
+  has_many :supports
+  has_many :supporteds, class_name: Support, foreign_key: :target_id do
+    def by_user(user)
+      joins(:stand).where(stands: {user_id: user})
+    end
+  end
 
   accepts_nested_attributes_for :versions
 
@@ -26,6 +32,14 @@ class Stand < ActiveRecord::Base
     versions.count > 1
   end
 
+  def supported?(user)
+    supporteds.by_user(user).exists?
+  end
+
+  def supported(user)
+    supporteds.by_user(user).first
+  end
+
   def reason
     current_version.reason
   end
@@ -35,7 +49,7 @@ class Stand < ActiveRecord::Base
   end
 
   def statuses
-    result = comments.persisted + versions
+    result = comments.persisted + versions + supports + supporteds
     result.compact.sort_by!(&:created_at).reverse
   end
 end

@@ -1,7 +1,17 @@
 .panel.panel-default{id: dom_id(stand)}
   .panel-heading
     .text-muted.pull-right
-      = link_to('고치기', edit_stand_path(stand), class: 'btn btn-default btn-xs') if current_user == stand.user
+      - if current_user == stand.user
+        = link_to '고치기', edit_stand_path(stand), class: 'btn btn-default btn-xs'
+      - else
+        - if !stand.supported?(current_user)
+          = link_to supports_path(target_id: stand), method: :post, class: 'btn btn-default btn-xs' do
+            지지하기
+            %span.badge= stand.supporteds.count
+        - else
+          = link_to support_path(stand.supported(current_user)), method: :delete, class: 'btn btn-default btn-xs' do
+            지지철회
+            %span.badge= stand.supporteds.count
       = link_to stand.updated_at, stand
     %i.glyphicon.glyphicon-user
     - if current_user == stand.user
@@ -24,10 +34,10 @@
       = render partial: 'comments/form', locals: { stand: stand }
     - if current_page?(controller: :stands, action: :show, id: stand)
       - stand.statuses.each do |status|
-        = render status
+        = render partial: status, locals: { stand: stand }
     - else
       - stand.statuses.first(2).each do |status|
-        = render status
+        = render partial: status, locals: { stand: stand }
       - if stand.statuses.size > 2
         %li.list-group-item
           = link_to '더보기 >>', stand

@@ -1,6 +1,6 @@
 class StandsController < ApplicationController
   def show
-    @stand = Stand.find(params[:id])
+    @stand = Stand.find params[:id]
     @poster = @stand.poster
 
     if !user_signed_in? or !@poster.has_stand_of? current_user
