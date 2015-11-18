@@ -11,24 +11,27 @@
     %p #{@persisted_stands.count}명이 이 글을 읽고 입장을 밝혀 주셨습니다.
 
   - if user_signed_in? and @poster.has_stand_of?(current_user)
-    %ul
+    .list-group
       - @poster.comments.latest.each do |comment|
-        %li{id: dom_id(comment)}
-          %dl
-            %dt choice
-            %dd
-              = comment.version.choice
-              - if comment.is_first?
-                - if comment.version.is_first?
-                  [최초 입장]
-                - else
-                  [입장 변경]
-            %dt comment
-            %dd= comment.body
-            %dt user
-            %dd= comment.user.email
-            %dt created_at
-            %dd= comment.created_at
+        .list-group-item{id: dom_id(comment)}
+          .list-group-item-heading
+            %i.glyphicon.glyphicon-user
+            = comment.user.email
+            - if comment.is_first?
+              - if comment.version.is_first?
+                %span.label.label-new new
+              - else
+                %span.label(class="label-#{comment.version.previous.choice}")= comment.version.previous.choice
+                %i.glyphicon.glyphicon-arrow-right
+            %span.label(class="label-#{comment.version.choice}")= comment.version.choice
+
+          .list-group-item-text
+            %pre= comment.body
+            .text-muted
+              .pull-right
+
+                = comment.created_at
+              .clearfix
   - else
     %p
       다른 사람들의 입장을 살펴 보시기 전에 먼저
@@ -38,8 +41,11 @@
 
 %section
 - if user_signed_in?
-  - if @poster.has_stand_of?(current_user)
-    %p 이 글에 대해 #{current_user.email}는 #{@poster.stand_of(current_user).current_version.choice}합니다.
+  - if @current_user_stand.persisted?
+    %p
+      이 글에 대해 #{current_user.email}는
+      %span.label(class="label-#{@current_user_stand.current_version.choice}")= @current_user_stand.current_version.choice
+      합니다.
     = form_for [@current_user_stand, @current_user_stand.versions.build] do |f|
       = render partial: 'shared/error_messages', locals: {object: f.object}
       = render partial: 'versions/form', locals: {poster: @poster, f: f}

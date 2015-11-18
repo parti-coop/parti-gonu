@@ -4,3 +4,23 @@
 body {
   padding-top: 60px;
 }
+
+.label-abstain {
+  @extend .label-default;
+}
+
+.label-in_favor {
+  @extend .label-primary;
+}
+
+.label-oppose {
+  @extend .label-danger;
+}
+
+.label-new {
+  @extend .label-info;
+}
+
+.label-change {
+  @extend .label-warning;
+}

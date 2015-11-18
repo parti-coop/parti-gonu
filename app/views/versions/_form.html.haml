@@ -1,4 +1,3 @@
-= poster.stand_of(current_user).inspect
 .form-group
   - Version.choices.keys.each do |choice|
     = f.radio_button :choice, choice, checked: poster.stand_of(current_user).try(:choice) == choice
