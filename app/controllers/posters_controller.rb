@@ -23,7 +23,16 @@ class PostersController < ApplicationController
 
   def create
     @poster = Poster.new(create_params)
-    @poster.user = current_user
+    @precursor = Poster.find_by url: @poster.url
+
+    if @precursor.present?
+      if @poster.relatings.any?
+        @precursor.relatings.build({relating_id: @poster.relatings.first.relating.id})
+      end
+      @poster = @precursor
+    else
+      @poster.user = current_user
+    end
     @poster.save!
 
     redirect_to @poster

@@ -26,11 +26,10 @@ class PostersTest < ActionDispatch::IntegrationTest
                  assigns(:poster).description
   end
 
-  focus
   test "related poster" do
     log_in_as(:dali)
 
-    post posters_path(poster: { url: 'http://daum.net', relatings_attributes: { '0': { relating_id: posters(:abc) }}})
+    post posters_path(poster: { url: 'http://www.google.co.kr/', relatings_attributes: { '0': { relating_id: posters(:abc) }}})
     assert_includes assigns(:poster).relatable_posters, posters(:abc)
     relating_poster = assigns(:poster).relatable_posters[0]
     assert_includes relating_poster.relatable_posters, assigns(:poster)

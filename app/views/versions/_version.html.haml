@@ -15,6 +15,7 @@
       - if version.change_reason?
         이유를 변경했습니다 :
         = truncate(version.reason)
+    %span.text-muted= version.created_at
 
 
 

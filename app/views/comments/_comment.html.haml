@@ -4,4 +4,6 @@
     = comment.user.email
     - if comment.has_stand_of_user?
       %span.label(class="label-#{comment.stand_of_user.choice}")= comment.stand_of_user.choice
-    .list-group-item-text(style="white-space: pre;")= preserve comment.body
+    .list-group-item-text
+      %div(style="white-space: pre;")= preserve comment.body
+      %span.text-muted= comment.created_at
