@@ -7,16 +7,10 @@ class Version < ActiveRecord::Base
   has_many :comments
   accepts_nested_attributes_for :comments
 
-  validate :choice_check
+  scope :latest, ->{ order(id: :desc) }
 
   after_create :update_poster_and_stand
   after_create :update_stand
-
-  def choice_check
-    if !previous.nil? and previous.choice == self.choice
-      errors.add(:choice, "이전 입장과 달라야")
-    end
-  end
 
   def user
     stand.user
@@ -24,6 +18,18 @@ class Version < ActiveRecord::Base
 
   def is_first?
     previous.nil?
+  end
+
+  def same? params
+    params[:choice] == self.choice and params[:reason] == self.reason
+  end
+
+  def change_choice?
+    self.previous.present? and self.choice != previous.choice
+  end
+
+  def change_reason?
+    self.previous.present? and self.reason != previous.reason
   end
 
   private

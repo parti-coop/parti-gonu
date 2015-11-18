@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151116062544) do
+ActiveRecord::Schema.define(version: 20151118044015) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "body",       limit: 65535
@@ -69,11 +69,12 @@ ActiveRecord::Schema.define(version: 20151116062544) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "versions", force: :cascade do |t|
-    t.integer  "choice",      limit: 4, null: false
-    t.integer  "stand_id",    limit: 4, null: false
+    t.integer  "choice",      limit: 4,     null: false
+    t.integer  "stand_id",    limit: 4,     null: false
     t.integer  "previous_id", limit: 4
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.text     "reason",      limit: 65535
   end
 
   add_index "versions", ["previous_id"], name: "index_versions_on_previous_id", using: :btree

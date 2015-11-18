@@ -21,15 +21,17 @@ class ActiveSupport::TestCase
     post stand_versions_path(stand_id: stand, version: versions_attributes)
   end
 
-  def post_stand(poster, choice, comment_body)
-    versions_attributes = make_versions_attributes choice, comment_body
-    versions_attributes[:comments_attributes] = {'0': {body: comment_body}} if comment_body.present?
+  def patch_stand(stand, choice, reason)
+    versions_attributes = make_versions_attributes choice, reason
+    patch stand_path(id: stand, stand: {versions_attributes: {'0': versions_attributes}})
+  end
+
+  def post_stands(poster, choice, reason)
+    versions_attributes = make_versions_attributes choice, reason
     post poster_stands_path(poster_id: poster, stand: {versions_attributes: {'0': versions_attributes}})
   end
 
-  def make_versions_attributes(choice, comment_body)
-    versions_attributes = {choice: choice.to_s}
-    versions_attributes[:comments_attributes] = {'0': {body: comment_body}} if comment_body.present?
-    versions_attributes
+  def make_versions_attributes(choice, reason)
+    {choice: choice.to_s, reason: reason}
   end
 end

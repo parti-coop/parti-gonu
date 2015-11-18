@@ -1,8 +1,7 @@
 .form-group
   - Version.choices.keys.each do |choice|
-    = f.radio_button :choice, choice, checked: poster.stand_of(current_user).try(:choice) == choice
+    = f.radio_button :choice, choice, checked: (stand.has_changes? and stand.previous_version.choice == choice)
     = f.label choice.to_sym
 .form-group
-  = f.fields_for :comments, f.object.comments.build do |f_comment|
-    = f_comment.text_area :body
+  = f.text_area :reason, value: (stand.previous_version.reason if stand.has_changes?), cols: 100, rows: 5
 = f.submit

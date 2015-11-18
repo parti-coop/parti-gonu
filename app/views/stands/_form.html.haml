@@ -1,0 +1,4 @@
+= form_for [(stand.poster unless stand.persisted?), stand] do |f|
+  = render partial: 'shared/error_messages', locals: { object: stand }
+  = f.fields_for :versions, stand.versions.build do |f_version|
+    = render partial: 'versions/form', locals: {stand: stand, f: f_version}
