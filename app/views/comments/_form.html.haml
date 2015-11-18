@@ -1,0 +1,4 @@
+= form_for [stand, stand.comments.build] do |f|
+  = render partial: 'shared/error_messages', locals: { object: f.object }
+  = f.text_area :body
+  = f.submit

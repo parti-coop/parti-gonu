@@ -4,9 +4,15 @@ class Stand < ActiveRecord::Base
   belongs_to :user
   belongs_to :poster
   has_many :versions
+  has_many :comments do
+    def persisted
+      collect{ |comment| comment if comment.persisted? }
+    end
+  end
+
   accepts_nested_attributes_for :versions
 
-  scope :latest, ->{ order(id: :desc) }
+  scope :latest, ->{ order(updated_at: :desc) }
   scope :by_choice, -> (choice) { where(choice: choice) }
 
   def current_version
@@ -27,5 +33,10 @@ class Stand < ActiveRecord::Base
 
   def choice
     current_version.choice
+  end
+
+  def statuses
+    result = comments.persisted + versions
+    result.compact.sort_by!(&:created_at).reverse
   end
 end

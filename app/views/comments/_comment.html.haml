@@ -1,0 +1,7 @@
+%li.list-group-item
+  .list-group-item-heading
+    %i.glyphicon.glyphicon-user
+    = comment.user.email
+    - if comment.has_stand_of_user?
+      %span.label(class="label-#{comment.stand_of_user.choice}")= comment.stand_of_user.choice
+    .list-group-item-text(style="white-space: pre;")= preserve comment.body

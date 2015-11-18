@@ -1,0 +1,20 @@
+%li.list-group-item
+  .list-group-item-heading
+    %i.glyphicon.glyphicon-user
+    = version.stand.user.email
+    - if version.change_choice?
+      %span.label(class="label-#{version.previous.choice}")= version.previous.choice
+      %i.glyphicon.glyphicon-arrow-right
+    %span.label(class="label-#{version.choice}")= version.choice
+  .list-group-item-text
+    - if version.is_first?
+      처음 입장을 밝혔습니다.
+    - else
+      - if version.change_choice?
+        입장을 변경했습니다.
+      - if version.change_reason?
+        이유를 변경했습니다 :
+        = truncate(version.reason)
+
+
+

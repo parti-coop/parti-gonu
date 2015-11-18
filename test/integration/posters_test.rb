@@ -7,7 +7,7 @@ class PostersTest < ActionDispatch::IntegrationTest
     get new_poster_path
     assert_response :success
 
-    post posters_path(poster: { url: 'http://daum.net' })
+    post posters_path(poster: { url: 'http://ogp.me' })
     assert_equal users(:dali), assigns(:poster).user
     assert_redirected_to poster_path(assigns(:poster))
   end

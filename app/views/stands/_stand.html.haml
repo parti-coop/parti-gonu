@@ -13,26 +13,9 @@
     합니다.
   .panel-body(style="white-space: pre;")= preserve stand.reason
   .panel-body
-    %h4 타임라인
     .panel.panel-default
       %ul.list-group
-        - stand.versions.latest.each do |version|
-          %li.list-group-item
-            .list-group-item-heading
-              %i.glyphicon.glyphicon-user
-              = stand.user.email
-              - if version.change_choice?
-                %span.label(class="label-#{version.previous.choice}")= version.previous.choice
-                %i.glyphicon.glyphicon-arrow-right
-              %span.label(class="label-#{version.choice}")= version.choice
-            - if version.is_first?
-              처음 입장을 밝혔습니다.
-            - else
-              - if version.change_reason?
-                .list-group-item-text
-                이유가 변경되었습니다 :
-                = truncate(version.reason)
-              - else
-                입장만 변경되었습니다.
-
-
+        %li.list-group-item
+          = render partial: 'comments/form', locals: { stand: stand }
+        - stand.statuses.each do |status|
+          = render status

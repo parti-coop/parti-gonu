@@ -11,16 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151118044015) do
+ActiveRecord::Schema.define(version: 20151118091134) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "body",       limit: 65535
-    t.integer  "version_id", limit: 4,     null: false
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.integer  "stand_id",   limit: 4
+    t.integer  "user_id",    limit: 4
   end
 
-  add_index "comments", ["version_id"], name: "index_comments_on_version_id", using: :btree
+  add_index "comments", ["stand_id"], name: "index_comments_on_stand_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "posters", force: :cascade do |t|
     t.string   "url",                          limit: 255,               null: false

@@ -1,3 +1,4 @@
 comment_1:
-  version: stand1_v1
+  stand: stand1
   body: 'test1'
+  user: jaygoon

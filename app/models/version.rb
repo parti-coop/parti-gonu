@@ -4,8 +4,6 @@ class Version < ActiveRecord::Base
   belongs_to :stand
   belongs_to :previous, class_name: Version
   delegate :poster, to: :stand
-  has_many :comments
-  accepts_nested_attributes_for :comments
 
   scope :latest, ->{ order(id: :desc) }
 
