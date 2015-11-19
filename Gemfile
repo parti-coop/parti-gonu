@@ -15,6 +15,7 @@ gem 'haml-rails', '~> 0.9.0'
 gem 'devise', '~> 3.5.2'
 gem 'bootstrap-sass', '~> 3.3', '>= 3.3.5.1'
 gem 'link_thumbnailer', '~> 3.1'
+gem 'envyable', '~> 0.2.0'
 
 group :development, :test do
   gem 'byebug'
