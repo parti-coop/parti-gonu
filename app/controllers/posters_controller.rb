@@ -32,8 +32,12 @@ class PostersController < ApplicationController
       end
     end
     @poster.user = current_user
-    @poster.save!
+    @poster.save
 
+    if @poster.errors.any?
+      flash[:error] = @poster.errors.full_messages.to_sentence
+      redirect_to :back and return
+    end
     redirect_to @poster
   end
 

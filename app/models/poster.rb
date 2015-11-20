@@ -11,6 +11,8 @@ class Poster < ActiveRecord::Base
 
   accepts_nested_attributes_for :relatings
 
+  validates :question, presence: true
+
   default_scope { order(created_at: :desc) }
 
   def has_stand_of?(user)
