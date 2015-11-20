@@ -2,8 +2,12 @@
   .form-group
     = f.label :url do
       링크 주소
-    .text-muted http://까지 넣어주세요.
-    = f.text_field :url, class: 'form-control'
+    - if @source.present?
+      = f.hidden_field :source_id, value: @source.id
+      = link_to @source.url, @source.url
+    - else
+      .text-muted http://까지 넣어주세요.
+      = f.text_field :url, class: 'form-control'
   .form-group
     = f.label :question do
       입장을 묻고 싶습니다

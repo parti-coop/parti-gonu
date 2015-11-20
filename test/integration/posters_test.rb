@@ -22,9 +22,10 @@ class PostersTest < ActionDispatch::IntegrationTest
     log_in_as(:dali)
 
     post posters_path(poster: { url: 'http://ogp.me', question: 'question1' })
-    assert_equal 'Open Graph protocol', assigns(:poster).title
+    assert_equal 'http://ogp.me', assigns(:poster).source.url
+    assert_equal 'Open Graph protocol', assigns(:poster).source.title
     assert_equal 'The Open Graph protocol enables any web page to become a rich object in a social graph.',
-                 assigns(:poster).description
+                 assigns(:poster).source.description
   end
 
   test "related poster" do
@@ -34,5 +35,15 @@ class PostersTest < ActionDispatch::IntegrationTest
     assert_includes assigns(:poster).relatable_posters, posters(:abc)
     relating_poster = assigns(:poster).relatable_posters[0]
     assert_includes relating_poster.relatable_posters, assigns(:poster)
+  end
+
+  test "same url" do
+    log_in_as(:dali)
+
+    post posters_path(poster: { url: 'http://www.google.co.kr/', question: 'question1'})
+    source = assigns(:poster).source
+    post posters_path(poster: { url: 'http://www.google.co.kr/', question: 'question2'})
+    assert_equal source, assigns(:poster).source
+    assert_includes assigns(:poster).source.posters, assigns(:poster)
   end
 end

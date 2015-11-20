@@ -5,6 +5,9 @@ class PostersController < ApplicationController
 
   def new
     @poster = Poster.new
+    if params[:source_id].present?
+      @source = Source.find params[:source_id]
+    end
   end
 
   def show
@@ -23,16 +26,12 @@ class PostersController < ApplicationController
 
   def create
     @poster = Poster.new(create_params)
-    @precursor = Poster.find_by url: @poster.url
-
-    if @precursor.present?
-      if @poster.relatings.any?
-        @precursor.relatings.build({relating_id: @poster.relatings.first.relating.id})
+    unless @poster.source.present?
+      @poster.source = Source.find_or_initialize_by(url: @poster.url) do |s|
+        s.url = @poster.url
       end
-      @poster = @precursor
-    else
-      @poster.user = current_user
     end
+    @poster.user = current_user
     @poster.save!
 
     redirect_to @poster
@@ -41,6 +40,6 @@ class PostersController < ApplicationController
   private
 
   def create_params
-    params.require(:poster).permit(:url, :question, relatings_attributes: [ :relating_id ] )
+    params.require(:poster).permit(:source_id, :url, :question, relatings_attributes: [ :relating_id ] )
   end
 end

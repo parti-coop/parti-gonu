@@ -2,24 +2,41 @@
   .panel-heading
     .pull-right
       - if current_page?(controller: :posters, action: :show, id: poster)
+        = link_to '다른 질문하기', new_poster_path(source_id: poster.source), class: 'btn btn-default'
+      - if current_page?(controller: :posters, action: :show, id: poster)
         = link_to '다른 대자보 연결하기', new_poster_path(relating_poster_id: poster), class: 'btn btn-default'
     %h4
       = link_to_if !current_page?(controller: :posters, action: :show, id: poster), poster.title, poster
-      %small= link_to poster.url, poster.url
+      %small= link_to truncate(poster.url), poster.url
+    .text-muted
+      = poster.description
+      = link_to "[더보기]", poster.url
   .panel-body
-    %h5
-      %i.glyphicon.glyphicon-modal-window
-      살짝보면
-    = link_to_if !current_page?(controller: :posters, action: :show, id: poster), poster.description, poster
-    = link_to "[더보기]", poster.url
     %h5
       %i.glyphicon.glyphicon-question-sign
       질문 드립니다
     = poster.question
 
+  - if poster.same_sourced_posters.any?
+    .panel-body
+      %h5
+        %i.glyphicon.glyphicon-random
+        같은 링크, 다른 질문
+      %ul
+      - poster.same_sourced_posters.each do |the_other_poster|
+        - unless the_other_poster == poster
+          %li
+            = link_to the_other_poster.question, the_other_poster
+            %span.text-muted
+              \-
+              %i.glyphicon.glyphicon-user
+              = the_other_poster.user.email
+
   - if poster.relatable_posters.any?
     .panel-body
-      %h5 연결 대자보
+      %h5
+        %i.glyphicon.glyphicon-link
+        연결 대자보
       %ul
       - poster.relatable_posters.each do |relatable|
         %li
@@ -28,6 +45,7 @@
             \-
             %i.glyphicon.glyphicon-user
             = relatable.user.email
+
   .panel-footer
     %span.text-muted.pull-right
       %i.glyphicon.glyphicon-user

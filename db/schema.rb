@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151120010425) do
+ActiveRecord::Schema.define(version: 20151120043158) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "body",       limit: 65535
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20151120010425) do
   add_index "comments", ["user_id"], name: "index_comments_on_user_id"
 
   create_table "posters", force: :cascade do |t|
-    t.string   "url",         limit: 255,   null: false
+    t.string   "url",         limit: 255
     t.integer  "user_id",     limit: 4,     null: false
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
@@ -33,8 +33,10 @@ ActiveRecord::Schema.define(version: 20151120010425) do
     t.text     "description", limit: 65535
     t.string   "image",       limit: 255
     t.text     "question",                  null: false
+    t.integer  "source_id"
   end
 
+  add_index "posters", ["source_id"], name: "index_posters_on_source_id"
   add_index "posters", ["url"], name: "index_posters_on_url"
   add_index "posters", ["user_id"], name: "index_posters_on_user_id"
 
@@ -47,6 +49,17 @@ ActiveRecord::Schema.define(version: 20151120010425) do
 
   add_index "relatables", ["related_id"], name: "index_relatables_on_related_id"
   add_index "relatables", ["relating_id", "related_id"], name: "index_relatables_on_relating_id_and_related_id", unique: true
+
+  create_table "sources", force: :cascade do |t|
+    t.string   "url",         null: false
+    t.string   "title"
+    t.text     "description"
+    t.string   "image"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "sources", ["url"], name: "index_sources_on_url", unique: true
 
   create_table "stands", force: :cascade do |t|
     t.integer  "user_id",    limit: 4, null: false

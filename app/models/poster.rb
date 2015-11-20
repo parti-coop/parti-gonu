@@ -1,5 +1,6 @@
 class Poster < ActiveRecord::Base
   belongs_to :user
+  belongs_to :source
   has_many :stands
   has_many :versions, through: :stands
   has_many :comments, through: :versions
@@ -11,8 +12,6 @@ class Poster < ActiveRecord::Base
   accepts_nested_attributes_for :relatings
 
   default_scope { order(created_at: :desc) }
-
-  before_create :setup_meta
 
   def has_stand_of?(user)
     stands.exists?(user: user)
@@ -26,11 +25,29 @@ class Poster < ActiveRecord::Base
     (relating_posters.all + related_posters.all).uniq
   end
 
+  def url
+    self_or_source(:url)
+  end
+
+  def title
+    self_or_source(:title)
+  end
+
+  def description
+    self_or_source(:description)
+  end
+
+  def image
+    self_or_source(:image)
+  end
+
+  def same_sourced_posters
+    source.posters.where.not(id: self)
+  end
+
   private
 
-  def setup_meta
-    og = LinkThumbnailer.generate(self.url)
-    self.title = og.title
-    self.description = og.description
+  def self_or_source(field)
+    read_attribute(field) || source.try(field)
   end
 end
