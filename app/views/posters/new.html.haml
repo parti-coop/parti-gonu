@@ -1,5 +1,14 @@
 = form_for @poster do |f|
-  = f.text_field :url
+  .form-group
+    = f.label :url do
+      링크 주소
+    .text-muted http://까지 넣어주세요.
+    = f.text_field :url, class: 'form-control'
+  .form-group
+    = f.label :question do
+      입장을 묻고 싶습니다
+    .text-muted 위에 링크를 읽고 찬반 입장을 표시할 수 있는 질문을 넣어주세요.
+    = f.text_area :question, class: 'form-control'
   - if params[:relating_poster_id]
     = f.fields_for :relatings, @poster.relatings.build do |f_relating|
       = f_relating.hidden_field :relating_id, value: params[:relating_poster_id]

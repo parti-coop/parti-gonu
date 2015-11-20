@@ -7,8 +7,9 @@ class PostersTest < ActionDispatch::IntegrationTest
     get new_poster_path
     assert_response :success
 
-    post posters_path(poster: { url: 'http://ogp.me' })
+    post posters_path(poster: { url: 'http://ogp.me', question: 'question1' })
     assert_equal users(:dali), assigns(:poster).user
+    assert_equal 'question1', assigns(:poster).question
     assert_redirected_to poster_path(assigns(:poster))
   end
 
@@ -20,7 +21,7 @@ class PostersTest < ActionDispatch::IntegrationTest
   test "meta attributes" do
     log_in_as(:dali)
 
-    post posters_path(poster: { url: 'http://ogp.me'})
+    post posters_path(poster: { url: 'http://ogp.me', question: 'question1' })
     assert_equal 'Open Graph protocol', assigns(:poster).title
     assert_equal 'The Open Graph protocol enables any web page to become a rich object in a social graph.',
                  assigns(:poster).description
@@ -29,7 +30,7 @@ class PostersTest < ActionDispatch::IntegrationTest
   test "related poster" do
     log_in_as(:dali)
 
-    post posters_path(poster: { url: 'http://www.google.co.kr/', relatings_attributes: { '0': { relating_id: posters(:abc) }}})
+    post posters_path(poster: { url: 'http://www.google.co.kr/', question: 'question1', relatings_attributes: { '0': { relating_id: posters(:abc) }}})
     assert_includes assigns(:poster).relatable_posters, posters(:abc)
     relating_poster = assigns(:poster).relatable_posters[0]
     assert_includes relating_poster.relatable_posters, assigns(:poster)

@@ -2,13 +2,21 @@
   .panel-heading
     .pull-right
       - if current_page?(controller: :posters, action: :show, id: poster)
-        = link_to '대자보 연결하기', new_poster_path(relating_poster_id: poster), class: 'btn btn-default'
+        = link_to '다른 대자보 연결하기', new_poster_path(relating_poster_id: poster), class: 'btn btn-default'
     %h4
       = link_to_if !current_page?(controller: :posters, action: :show, id: poster), poster.title, poster
       %small= link_to poster.url, poster.url
   .panel-body
+    %h5
+      %i.glyphicon.glyphicon-modal-window
+      살짝보면
     = link_to_if !current_page?(controller: :posters, action: :show, id: poster), poster.description, poster
     = link_to "[더보기]", poster.url
+    %h5
+      %i.glyphicon.glyphicon-question-sign
+      질문 드립니다
+    = poster.question
+
   - if poster.relatable_posters.any?
     .panel-body
       %h5 연결 대자보
@@ -16,7 +24,7 @@
       - poster.relatable_posters.each do |relatable|
         %li
           = link_to relatable.title, relatable
-          %span.text_muted
+          %span.text-muted
             \-
             %i.glyphicon.glyphicon-user
             = relatable.user.email

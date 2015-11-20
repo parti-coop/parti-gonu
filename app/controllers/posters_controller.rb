@@ -41,6 +41,6 @@ class PostersController < ApplicationController
   private
 
   def create_params
-    params.require(:poster).permit(:url, relatings_attributes: [ :relating_id ] )
+    params.require(:poster).permit(:url, :question, relatings_attributes: [ :relating_id ] )
   end
 end
