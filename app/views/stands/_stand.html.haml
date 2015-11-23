@@ -2,7 +2,7 @@
   .panel-heading
     .text-muted.pull-right
       - if current_user == stand.user
-        = link_to '고치기', edit_stand_path(stand), class: 'btn btn-default btn-xs'
+        = link_to '입장 다듬기/바꾸기', edit_stand_path(stand), class: 'btn btn-default btn-xs'
       - else
         - if !stand.supported?(current_user)
           = link_to supports_path(target_id: stand), method: :post, class: 'btn btn-default btn-xs' do

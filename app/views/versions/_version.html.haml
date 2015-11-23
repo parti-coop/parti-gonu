@@ -1,21 +1,11 @@
-%li.list-group-item
-  .list-group-item-heading
-    %i.glyphicon.glyphicon-user
-    = version.stand.user.email
-    - if version.change_choice?
-      %span.label(class="label-#{version.previous.choice}")= version.previous.choice
-      %i.glyphicon.glyphicon-arrow-right
-    %span.label(class="label-#{version.choice}")= version.choice
-  .list-group-item-text
-    - if version.is_first?
-      입장을 밝혔습니다.
-    - else
+- unless version.is_first?
+  %li.list-group-item
+    .list-group-item-text
       - if version.change_choice?
         입장을 변경했습니다.
       - if version.change_reason?
         이유를 변경했습니다 :
         = truncate(version.reason)
-    %span.text-muted= version.created_at
-
-
+    .list-group-item-footer
+      = render partial: 'shared/status_footer', locals: { choicable: version, previous_choicable: (version.previous if version.change_choice?), object: version }
 

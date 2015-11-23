@@ -1,9 +1,6 @@
 %li.list-group-item
-  .list-group-item-heading
-    %i.glyphicon.glyphicon-user
-    = comment.user.email
-    - if comment.has_stand_of_user?
-      %span.label(class="label-#{comment.stand_of_user.choice}")= comment.stand_of_user.choice
-    .list-group-item-text
-      %div(style="white-space: pre;")= preserve comment.body
-      %span.text-muted= comment.created_at
+  .list-group-item-text
+    %div(style="white-space: pre;")= preserve comment.body
+  .list-group-item-footer
+    = render partial: 'shared/status_footer', locals: { choicable: comment.stand_of_user, object: comment}
+

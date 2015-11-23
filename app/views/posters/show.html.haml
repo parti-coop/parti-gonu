@@ -33,8 +33,9 @@
                   = @persisted_oppose_stands.count
                   \:
                   oppose
-        - if @persisted_abstain_stands.any?
+        - if (@persisted_in_favor_stands.any? or @persisted_oppose_stands.any?) and @persisted_abstain_stands.any?
           %hr
+        - if @persisted_abstain_stands.any?
           %span.label.label-abstain
             abstain
             \:
@@ -57,6 +58,7 @@
 %section
   %h4
     입장
+    .clearfix
   - if user_signed_in?
     - if @poster.has_stand_of?(current_user)
       - @persisted_stands.each do |stand|
