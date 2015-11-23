@@ -13,25 +13,36 @@
       .panel-heading
         이 글을 읽고 #{@persisted_stands.count}분이 입장을 밝혀 주셨습니다.
       .panel-body
-        .row
-          .col-xs-5
-            %span.label.label-in_favor
-              in_favor
-              \:
-              = @persisted_in_favor_stands.count
-            .pull-right
-              = @persisted_in_favor_stands.first(3).map { |s| s.user.email }.join(', ')
-              = "..." if @persisted_in_favor_stands.count > 2
-          .col-xs-2
-            .text-center VS
-          .col-xs-5
-            = @persisted_oppose_stands.first(3).map { |s| s.user.email }.join(', ')
-            .pull-right
-              = "..." if @persisted_oppose_stands.count > 3
-              %span.label.label-oppose
-                = @persisted_oppose_stands.count
+        - if @persisted_in_favor_stands.any? or @persisted_oppose_stands.any?
+          .row
+            .col-xs-5
+              %span.label.label-in_favor
+                in_favor
                 \:
-                oppose
+                = @persisted_in_favor_stands.count
+              .pull-right
+                = @persisted_in_favor_stands.first(3).map { |s| s.user.email }.join(', ')
+                = "..." if @persisted_in_favor_stands.count > 2
+            .col-xs-2
+              .text-center VS
+            .col-xs-5
+              = @persisted_oppose_stands.first(3).map { |s| s.user.email }.join(', ')
+              .pull-right
+                = "..." if @persisted_oppose_stands.count > 3
+                %span.label.label-oppose
+                  = @persisted_oppose_stands.count
+                  \:
+                  oppose
+        - if @persisted_abstain_stands.any?
+          %hr
+          %span.label.label-abstain
+            abstain
+            \:
+            = @persisted_abstain_stands.count
+          %span(style='margin-left: 10px')
+            = @persisted_abstain_stands.first(3).map { |s| s.user.email }.join(', ')
+            = "..." if @persisted_abstain_stands.count > 2
+
       .panel-footer
         내 입장은
         %span.label(class="label-#{@poster.stand_of(current_user).choice}")= @poster.stand_of(current_user).choice
@@ -44,7 +55,8 @@
       %h4 현황
       %p 이 글을 읽고 #{@persisted_stands.count}분이 입장을 밝혀 주셨습니다.
 %section
-  %h4 입장
+  %h4
+    입장
   - if user_signed_in?
     - if @poster.has_stand_of?(current_user)
       - @persisted_stands.each do |stand|

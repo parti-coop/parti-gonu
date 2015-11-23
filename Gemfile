@@ -16,6 +16,7 @@ gem 'devise', '~> 3.5.2'
 gem 'bootstrap-sass', '~> 3.3', '>= 3.3.5.1'
 gem 'link_thumbnailer', '~> 3.1'
 gem 'envyable', '~> 0.2.0'
+gem 'slack-notifier', '~> 1.4'
 
 group :development, :test do
   gem 'byebug'

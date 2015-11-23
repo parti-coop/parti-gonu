@@ -1,4 +1,6 @@
 class SupportsController < ApplicationController
+  include SlackNotifing
+
   def create
     @target = Stand.find params[:target_id]
     @poster = @target.poster
@@ -14,6 +16,8 @@ class SupportsController < ApplicationController
     @target.touch
     @target.save!
 
+    slack(@support)
+
     redirect_to @poster
   end
 
@@ -27,6 +31,8 @@ class SupportsController < ApplicationController
 
     @target.touch
     @target.save!
+
+    slack(@support)
 
     @poster = @target.poster
     redirect_to @poster

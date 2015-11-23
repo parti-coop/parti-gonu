@@ -1,4 +1,6 @@
 class StandsController < ApplicationController
+  include SlackNotifing
+
   def show
     @stand = Stand.find params[:id]
     @poster = @stand.poster
@@ -19,7 +21,11 @@ class StandsController < ApplicationController
 
     @stand.save
 
-    flash[:error] = @stand.errors.full_messages.to_sentence if @stand.errors.any?
+    if @stand.errors.any?
+      flash[:error] = @stand.errors.full_messages.to_sentence
+    else
+      slack(@stand)
+    end
     redirect_to @stand.poster
   end
 
@@ -41,6 +47,10 @@ class StandsController < ApplicationController
     errors << @stand.errors.full_messages.to_sentence if @stand.errors.any?
     errors << @version.errors.full_messages.to_sentence if @version.present? and @version.errors.any?
     flash[:error] = errors.join
+
+    unless errors.any?
+      slack(@stand)
+    end
 
     redirect_to @stand.poster
   end

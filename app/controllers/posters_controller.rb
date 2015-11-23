@@ -1,4 +1,6 @@
 class PostersController < ApplicationController
+  include SlackNotifing
+
   def index
     @posters = Poster.all
   end
@@ -22,6 +24,7 @@ class PostersController < ApplicationController
     @persisted_stands = @poster.stands.latest.reject(&:new_record?)
     @persisted_in_favor_stands = @persisted_stands.select(&:in_favor?)
     @persisted_oppose_stands = @persisted_stands.select(&:oppose?)
+    @persisted_abstain_stands = @persisted_stands.select(&:abstain?)
   end
 
   def create
@@ -37,6 +40,8 @@ class PostersController < ApplicationController
     if @poster.errors.any?
       flash[:error] = @poster.errors.full_messages.to_sentence
       redirect_to :back and return
+    else
+      slack(@poster)
     end
     redirect_to @poster
   end

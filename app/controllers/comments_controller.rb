@@ -1,4 +1,6 @@
 class CommentsController < ApplicationController
+  include SlackNotifing
+
   def create
     @stand = Stand.find(params[:stand_id])
     @stand.touch
@@ -6,7 +8,11 @@ class CommentsController < ApplicationController
     @comment.user = current_user
     @comment.save
 
-    flash[:error] = @comment.errors.full_messages.to_sentence if @comment.errors.any?
+    if @comment.errors.any?
+      flash[:error] = @comment.errors.full_messages.to_sentence
+    else
+      slack(@comment)
+    end
 
     redirect_to @stand.poster
   end
