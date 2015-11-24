@@ -9,9 +9,11 @@
 - if user_signed_in? and @poster.has_stand_of?(current_user)
   %section
     %h4 현황
-    .panel.panel-default
-      .panel-heading
-        이 글을 읽고 #{@persisted_stands.count}분이 입장을 밝혀 주셨습니다.
+    %p
+      이 글을 읽고 #{@persisted_stands.count}분이 입장을 밝혀 주셨습니다.
+      %button.btn.btn-xs.btn-default(type="button" data-toggle="collapse" data-target="#static" aria-expanded="false" aria-controls="collapseExample")
+        자세히 보기
+    .panel.panel-default.collapse#static
       .panel-body
         - if @persisted_in_favor_stands.any? or @persisted_oppose_stands.any?
           .row
@@ -58,11 +60,13 @@
 %section
   %h4
     입장
-    .clearfix
   - if user_signed_in?
     - if @poster.has_stand_of?(current_user)
-      - @persisted_stands.each do |stand|
-        = render stand
+      - @persisted_stands.select{|s| s.reason.present? }.each_slice(3) do |group|
+        .row
+          - group.each do |stand|
+            .col-md-4
+              = render stand
     - else
       %p
         다른 사람들의 입장을 살펴 보시기 전에 먼저

@@ -2,7 +2,8 @@ class PostersController < ApplicationController
   include SlackNotifing
 
   def index
-    @posters = Poster.all
+    @posters = Poster.sorted_by_updown.all
+    @posters = @posters.tag(params[:tag]) if params[:tag].present?
   end
 
   def new
@@ -46,9 +47,22 @@ class PostersController < ApplicationController
     redirect_to @poster
   end
 
+  def up
+    @poster = Poster.find(params[:id])
+    @poster.up_count += 1
+    @poster.save!
+    redirect_to root_path
+  end
+
+  def down
+    @poster = Poster.find(params[:id])
+    @poster.down_count += 1
+    @poster.save!
+    redirect_to root_path
+  end
   private
 
   def create_params
-    params.require(:poster).permit(:source_id, :url, :question, relatings_attributes: [ :relating_id ] )
+    params.require(:poster).permit(:source_id, :url, :tags, :question, relatings_attributes: [ :relating_id ] )
   end
 end

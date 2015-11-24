@@ -12,22 +12,16 @@
           = link_to support_path(stand.supported(current_user)), method: :delete, class: 'btn btn-default btn-xs' do
             지지철회
             %span.badge= stand.supporteds.count
-      = link_to stand.updated_at, stand
-    %i.glyphicon.glyphicon-user
-    - if current_user == stand.user
-      나는
-    - else
-      = stand.user.email
-      은
     - if stand.current_version.change_choice?
       %span.label(class="label-#{stand.previous_version.choice}")= stand.previous_version.choice
       %i.glyphicon.glyphicon-arrow-right
     %span.label(class="label-#{stand.choice}")= stand.choice
-    합니다.
+    .user
+      %i.glyphicon.glyphicon-user
+      = stand.user.email
 
   .panel-body
-    %h5 이유는 아래와 같습니다.
-    %p(style="white-space: pre;")= preserve stand.reason
+    %p= stand.reason
 
   %ul.list-group
     %li.list-group-item
@@ -36,8 +30,8 @@
       - stand.statuses.each do |status|
         = render partial: status, locals: { stand: stand }
     - else
-      - stand.statuses.first(2).each do |status|
-        = render partial: status, locals: { stand: stand }
-      - if stand.statuses.size > 2
-        %li.list-group-item
-          = link_to '더보기 >>', stand
+      - stand.comments.persisted.first(2).each do |status|
+        - if status.present?
+          = render partial: status, locals: { stand: stand }
+      %li.list-group-item
+        = link_to '자세히 보기>>', stand

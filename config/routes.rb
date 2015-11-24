@@ -4,6 +4,10 @@ Rails.application.routes.draw do
 
   shallow do
     resources :posters do
+      member do
+        put :up
+        put :down
+      end
       resources :stands do
         resources :comments
       end

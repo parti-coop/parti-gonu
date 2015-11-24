@@ -1,4 +1,6 @@
 = form_for [stand, stand.comments.build] do |f|
   = render partial: 'shared/error_messages', locals: { object: f.object }
-  = f.text_area :body
-  = f.submit
+  .form-group
+    = f.text_area :body, class: 'form-control'
+  = f.submit '댓글', class: 'btn btn-default btn-xs pull-right'
+  .clearfix

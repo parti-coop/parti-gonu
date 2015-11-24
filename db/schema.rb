@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151120043158) do
+ActiveRecord::Schema.define(version: 20151124014634) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "body",       limit: 65535
@@ -26,14 +26,19 @@ ActiveRecord::Schema.define(version: 20151120043158) do
 
   create_table "posters", force: :cascade do |t|
     t.string   "url",         limit: 255
-    t.integer  "user_id",     limit: 4,     null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "user_id",     limit: 4,                 null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.text     "title",       limit: 65535
     t.text     "description", limit: 65535
     t.string   "image",       limit: 255
-    t.text     "question",                  null: false
+    t.text     "question",                              null: false
     t.integer  "source_id"
+    t.integer  "up",                        default: 0
+    t.integer  "down",                      default: 0
+    t.integer  "up_count",                  default: 0
+    t.integer  "down_count",                default: 0
+    t.string   "tags"
   end
 
   add_index "posters", ["source_id"], name: "index_posters_on_source_id"

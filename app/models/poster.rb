@@ -14,6 +14,8 @@ class Poster < ActiveRecord::Base
   validates :question, presence: true
 
   default_scope { order(created_at: :desc) }
+  scope :sorted_by_updown, -> { reorder('up_count - down_count desc') }
+  scope :tag, ->(tag) { where("tags like ?", "%#{tag}%") }
 
   def has_stand_of?(user)
     stands.exists?(user: user)
@@ -45,6 +47,10 @@ class Poster < ActiveRecord::Base
 
   def same_sourced_posters
     source.posters.where.not(id: self)
+  end
+
+  def self.tags
+    self.all.map(&:tags).compact.join(' ').split.uniq
   end
 
   private

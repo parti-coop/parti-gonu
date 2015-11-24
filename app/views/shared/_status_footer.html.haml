@@ -7,4 +7,4 @@
   %i.glyphicon.glyphicon-user
   = object.user.email
   %i.glyphicon.glyphicon-time
-  %span= object.created_at
+  %span= object.created_at.strftime("%Y-%m-%d")

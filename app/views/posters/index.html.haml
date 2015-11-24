@@ -1,7 +1,13 @@
 %section.breadcrumb-wrapper
   %ol.breadcrumb
     %li= link_to 'Home', root_path
-
+    - if params[:tag].present?
+      %li.active ##{params[:tag]}
+%section
+  %h4
+    Tags
+    - Poster.tags.each do |tag|
+      = link_to "##{tag}", posters_path(tag: tag)
 %section
   - @posters.each do |poster|
     = render poster

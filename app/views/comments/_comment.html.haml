@@ -1,6 +1,6 @@
 %li.list-group-item
   .list-group-item-text
-    %div(style="white-space: pre;")= preserve comment.body
+    = comment.body
   .list-group-item-footer
     = render partial: 'shared/status_footer', locals: { choicable: comment.stand_of_user, object: comment}
 

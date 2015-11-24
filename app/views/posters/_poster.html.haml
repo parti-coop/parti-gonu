@@ -6,18 +6,23 @@
     .text-muted
       = poster.description
       = link_to "[더보기]", poster.url
+    = link_to up_poster_path(poster), method: :put, class: 'btn btn-default' do
+      up
+      .badge= poster.up_count
+    = link_to down_poster_path(poster), method: :put, class: 'btn btn-default' do
+      down
+      .badge= poster.down_count
+
+
   .panel-body
-    %h5
-      %i.glyphicon.glyphicon-question-sign
-      질문 드립니다
-    = poster.question
+    %h5= poster.question
 
   - if current_page?(controller: :posters, action: :show, id: poster)
     - if poster.same_sourced_posters.any?
       .panel-body
         %h5
           %i.glyphicon.glyphicon-random
-          같은 링크, 다른 질문
+          같은 링크, 다른 토론 주제
         %ul
         - poster.same_sourced_posters.each do |the_other_poster|
           - unless the_other_poster == poster
@@ -49,10 +54,7 @@
       님이 붙인 대자보입니다.
     - if current_page?(controller: :posters, action: :show, id: poster)
       .controller
-        = link_to '다른 질문하기', new_poster_path(source_id: poster.source), class: 'btn btn-xs btn-default'
-        = link_to '찬성측에 다른 질문하기', new_poster_path(source_id: poster.source), class: 'btn btn-xs btn-default'
-        = link_to '반대측에 다른 질문하기', new_poster_path(source_id: poster.source), class: 'btn btn-xs btn-default'
-        \|
+        = link_to '다른 주제로 토론하기', new_poster_path(source_id: poster.source), class: 'btn btn-xs btn-default'
         = link_to '연관 대자보 연결하기', new_poster_path(relating_poster_id: poster), class: 'btn btn-xs btn-default'
     .clearfix
 
