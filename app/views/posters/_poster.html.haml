@@ -1,5 +1,5 @@
 .panel.panel-default
-  .panel-heading
+  .panel-body
     %h4
       = link_to_if !current_page?(controller: :posters, action: :show, id: poster), poster.title, poster
       %small= link_to truncate(poster.url), poster.url
@@ -13,8 +13,6 @@
       down
       .badge= poster.down_count
 
-
-  .panel-body
     %h5= poster.question
 
   - if current_page?(controller: :posters, action: :show, id: poster)
@@ -57,4 +55,3 @@
         = link_to '다른 주제로 토론하기', new_poster_path(source_id: poster.source), class: 'btn btn-xs btn-default'
         = link_to '연관 대자보 연결하기', new_poster_path(relating_poster_id: poster), class: 'btn btn-xs btn-default'
     .clearfix
-
