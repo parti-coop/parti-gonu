@@ -30,7 +30,7 @@
       - stand.statuses.each do |status|
         = render partial: status, locals: { stand: stand }
     - else
-      - stand.comments.persisted.first(2).each do |status|
+      - stand.comments.latest.persisted.first(2).each do |status|
         - if status.present?
           = render partial: status, locals: { stand: stand }
       %li.list-group-item
