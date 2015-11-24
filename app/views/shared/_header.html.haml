@@ -1,7 +1,7 @@
-%header.navbar.navbar-inverse.navbar-fixed-top
+%header.navbar.navbar-default.navbar-fixed-top
   .container
     .navbar-header
-      = link_to "Parti", root_path, class: 'navbar-brand'
+      = link_to "Gonu", root_path, class: 'navbar-brand'
     %nav.navbar-right
       - if user_signed_in?
         %em.user--current__email.navbar-text= current_user.email
@@ -10,4 +10,3 @@
       - else
         = link_to 'Sign up', new_user_registration_path, class: 'btn btn-success navbar-btn'
         = link_to 'Log in', new_user_session_path, class: 'btn btn-default navbar-btn'
-
