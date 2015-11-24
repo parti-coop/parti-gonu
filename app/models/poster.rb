@@ -14,7 +14,7 @@ class Poster < ActiveRecord::Base
   validates :question, presence: true
 
   default_scope { order(created_at: :desc) }
-  scope :sorted_by_updown, -> { reorder('up_count - down_count desc') }
+  scope :sorted_by_updown, -> { reorder('up_count - down_count desc').order(created_at: :desc) }
   scope :tag, ->(tag) { where("tags like ?", "%#{tag}%") }
 
   def has_stand_of?(user)
