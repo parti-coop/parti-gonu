@@ -43,8 +43,8 @@ class PostersController < ApplicationController
       redirect_to :back and return
     else
       slack(@poster)
+      redirect_to @poster
     end
-    redirect_to @poster
   end
 
   def up

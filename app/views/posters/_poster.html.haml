@@ -1,19 +1,25 @@
 .panel.panel-default
-  .panel-body
+  .panel-heading
     %h4
       = link_to_if !current_page?(controller: :posters, action: :show, id: poster), poster.title, poster
       %small= link_to truncate(poster.url), poster.url
-    .text-muted
+
+  .panel-body
+    %p.lead
       = poster.description
       = link_to "[더보기]", poster.url
-    = link_to up_poster_path(poster), method: :put, class: 'btn btn-default' do
-      up
-      .badge= poster.up_count
-    = link_to down_poster_path(poster), method: :put, class: 'btn btn-default' do
-      down
-      .badge= poster.down_count
 
-    %h5= poster.question
+    %p.lead
+      %i.fa.fa-question
+      = poster.question
+
+    .vote_buttons.text-center
+      = link_to up_poster_path(poster), method: :put, class: 'btn btn-success btn-lg' do
+        %i.fa.fa-thumbs-up
+        %strong= poster.up_count
+      = link_to down_poster_path(poster), method: :put, class: 'btn btn-danger btn-lg' do
+        %i.fa.fa-thumbs-down
+        %strong= poster.down_count
 
   - if current_page?(controller: :posters, action: :show, id: poster)
     - if poster.same_sourced_posters.any?
@@ -46,12 +52,11 @@
               = relatable.user.email
 
   .panel-footer
-    %span.text-muted.pull-right
-      %i.glyphicon.glyphicon-user
+    %span.text-muted
+      %i.fa.fa-user
       = poster.user.email
       님이 붙인 대자보입니다.
     - if current_page?(controller: :posters, action: :show, id: poster)
       .controller
         = link_to '다른 주제로 토론하기', new_poster_path(source_id: poster.source), class: 'btn btn-xs btn-default'
         = link_to '연관 대자보 연결하기', new_poster_path(relating_poster_id: poster), class: 'btn btn-xs btn-default'
-    .clearfix
