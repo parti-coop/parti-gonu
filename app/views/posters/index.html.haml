@@ -4,11 +4,12 @@
     - if params[:tag].present?
       %li.active ##{params[:tag]}
 
-%section.bs-component
-  .jumbotron
-    %h4.text-center
-      - Poster.tags.each do |tag|
-        %strong= link_to "##{tag}", posters_path(tag: tag)
+- if Poster.tags.any?
+  %section.bs-component
+    .jumbotron
+      %h4.text-center
+        - Poster.tags.each do |tag|
+          %strong= link_to "##{tag}", posters_path(tag: tag)
 
 %section
   - @posters.each do |poster|

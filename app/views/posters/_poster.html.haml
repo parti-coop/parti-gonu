@@ -10,7 +10,7 @@
       = link_to "[더보기]", poster.url
 
     %p.lead
-      %i.fa.fa-question
+      %i.fa.fa-bullhorn
       = poster.question
 
     .vote_buttons.text-center
@@ -22,41 +22,40 @@
         %strong= poster.down_count
 
   - if current_page?(controller: :posters, action: :show, id: poster)
-    - if poster.same_sourced_posters.any?
-      .panel-body
-        %h5
-          %i.glyphicon.glyphicon-random
-          같은 링크, 다른 토론 주제
-        %ul
-        - poster.same_sourced_posters.each do |the_other_poster|
-          - unless the_other_poster == poster
-            %li
-              = link_to the_other_poster.question, the_other_poster
-              %span.text-muted
-                \-
-                %i.glyphicon.glyphicon-user
-                = the_other_poster.user.email
-
-    - if poster.relatable_posters.any?
-      .panel-body
-        %h5
-          %i.glyphicon.glyphicon-link
-          연결 대자보
-        %ul
-        - poster.relatable_posters.each do |relatable|
+    .panel-body
+      %h5
+        %i.glyphicon.glyphicon-random
+        같은 링크, 다른 토론 주제
+        = link_to '다른 주제로 토론하기', new_poster_path(source_id: poster.source), class: 'btn btn-sm btn-default'
+      %ul
+      - poster.same_sourced_posters.each do |the_other_poster|
+        - unless the_other_poster == poster
           %li
-            = link_to relatable.title, relatable
+            = link_to the_other_poster.question, the_other_poster
             %span.text-muted
               \-
               %i.glyphicon.glyphicon-user
-              = relatable.user.email
+              = the_other_poster.user.email
+
+    .panel-body
+      %h5
+        %i.glyphicon.glyphicon-link
+        연결 대자보
+        = link_to '연결 대자보 만들기', new_poster_path(relating_poster_id: poster), class: 'btn btn-sm btn-default'
+      %ul
+      - poster.relatable_posters.each do |relatable|
+        %li
+          = link_to relatable.title, relatable
+          %span.text-muted
+            \-
+            %i.glyphicon.glyphicon-user
+            = relatable.user.email
 
   .panel-footer
-    %span.text-muted
+    .text-muted
       %i.fa.fa-user
       = poster.user.email
       님이 붙인 대자보입니다.
-    - if current_page?(controller: :posters, action: :show, id: poster)
-      .controller
-        = link_to '다른 주제로 토론하기', new_poster_path(source_id: poster.source), class: 'btn btn-xs btn-default'
-        = link_to '연관 대자보 연결하기', new_poster_path(relating_poster_id: poster), class: 'btn btn-xs btn-default'
+
+
+
