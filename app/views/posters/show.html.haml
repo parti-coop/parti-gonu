@@ -45,13 +45,6 @@
           %span(style='margin-left: 10px')
             = @persisted_abstain_stands.first(3).map { |s| s.user.email }.join(', ')
             = "..." if @persisted_abstain_stands.count > 2
-
-      .panel-footer
-        내 입장은
-        %span.label(class="label-#{@poster.stand_of(current_user).choice}")= @poster.stand_of(current_user).choice
-        입니다. 내 입장을 살펴보려면
-        = link_to '여기', @poster.stand_of(current_user)
-        를 클릭합니다.
 - else
   - if @persisted_stands.any?
     %section
@@ -60,6 +53,15 @@
 %section
   %h4
     입장
+  - if user_signed_in? and @poster.has_stand_of?(current_user)
+    %p
+      내 입장은
+      %span.label(class="label-#{@poster.stand_of(current_user).choice}")= @poster.stand_of(current_user).choice
+      입니다.
+      - if @poster.stand_of(current_user).reason.present?
+        = link_to '보기', @poster.stand_of(current_user), class: 'btn btn-xs btn-default'
+      = link_to '다듬기/바꾸기', edit_stand_path(@poster.stand_of(current_user)), class: 'btn btn-default btn-xs'
+
   - if user_signed_in?
     - if @poster.has_stand_of?(current_user)
       - @persisted_stands.select{|s| s.reason.present? }.each_slice(3) do |group|

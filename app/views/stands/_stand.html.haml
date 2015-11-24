@@ -20,8 +20,9 @@
       %i.glyphicon.glyphicon-user
       = stand.user.email
 
-  .panel-body
-    %p= stand.reason
+  - if stand.reason.present?
+    .panel-body
+      %p= stand.reason
 
   %ul.list-group
     %li.list-group-item
