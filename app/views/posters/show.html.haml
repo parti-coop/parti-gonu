@@ -64,11 +64,17 @@
 
   - if user_signed_in?
     - if @poster.has_stand_of?(current_user)
-      - @persisted_stands.select{|s| s.reason.present? }.each_slice(3) do |group|
-        .row
-          - group.each do |stand|
-            .col-md-4
-              = render stand
+      - stands = @persisted_stands.select{|s| s.reason.present? }.in_groups_of(3)
+      .row
+        .col-md-4
+          - stands.map(&:first).compact.each do |stand|
+            = render stand
+        .col-md-4
+          - stands.map(&:second).compact.each do |stand|
+            = render stand
+        .col-md-4
+          - stands.map(&:last).compact.each do |stand|
+            = render stand
     - else
       %p
         다른 사람들의 입장을 살펴 보시기 전에 먼저

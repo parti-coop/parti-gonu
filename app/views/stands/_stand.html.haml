@@ -20,9 +20,21 @@
       %i.glyphicon.glyphicon-user
       = stand.user.email
 
-  - if stand.reason.present?
-    .panel-body
-      %p= stand.reason
+  .panel-body
+    = stand.reason
+
+    - if stand.supports.any?
+      %h6
+        %i.glyphicon.glyphicon-hand-down
+        지지입장
+      - stand.supports.each do |support|
+        = link_to support.target, style: 'text-decoration: none' do
+          %span.label(class="label-#{support.target.choice}")= support.target.choice
+          - if support.target.reason.present?
+            "#{truncate(support.target.reason)}"
+          %span.text-muted
+            %i.glyphicon.glyphicon-user
+            = support.target.user.email
 
   %ul.list-group
     %li.list-group-item
@@ -34,5 +46,6 @@
       - stand.comments.latest.persisted.first(2).each do |status|
         - if status.present?
           = render partial: status, locals: { stand: stand }
-      %li.list-group-item
-        = link_to '자세히 보기>>', stand
+
+  .panel-footer
+    = link_to '자세히 보기>>', stand

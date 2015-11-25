@@ -1,7 +1,9 @@
 .form-group
-  - Version.choices.keys.each do |choice|
-    = f.radio_button :choice, choice, checked: (previous_version.present? and previous_version.choice == choice)
-    = f.label choice.to_sym
+  = f.collection_radio_buttons :choice, Version.choices, :first, :first do |b|
+    = b.label(class: 'radio-inline') do
+      = b.radio_button checked: (previous_version.present? and previous_version.choice == b.value)
+      = b.text
 .form-group
-  = f.text_area :reason, value: (previous_version.reason if previous_version.present?), cols: 100, rows: 5
-= f.submit
+  = f.text_area :reason, value: (previous_version.reason if previous_version.present?), cols: 100, rows: 5, class: 'form-control', placeholder: '왜냐하면...'
+.form-group
+  = f.submit
