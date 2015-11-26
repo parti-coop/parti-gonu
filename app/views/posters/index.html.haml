@@ -4,7 +4,7 @@
     - if params[:tag].present?
       %li.active ##{params[:tag]}
 
-- if Poster.tags.any?
+- if Poster.tags.any? and !params[:tag].present?
   %section.bs-component
     .jumbotron
       %h4.text-center

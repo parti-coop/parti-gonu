@@ -2,8 +2,9 @@ class PostersController < ApplicationController
   include SlackNotifing
 
   def index
-    @posters = Poster.sorted_by_stand_counts
-    @posters = @posters.tag(params[:tag]) if params[:tag].present?
+    @posters = Poster.all
+    @posters = @posters.by_tag(params[:tag]) if params[:tag].present?
+    @posters = @posters.sort_by { |p| p.stands.count }.reverse
   end
 
   def new
