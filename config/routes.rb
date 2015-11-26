@@ -7,9 +7,15 @@ Rails.application.routes.draw do
       member do
         put :up
         put :down
+        put :in_favor
+        put :oppose
       end
       resources :stands do
         resources :comments
+        member do
+          put :in_favor
+          put :down
+        end
       end
     end
   end

@@ -14,7 +14,6 @@ class Poster < ActiveRecord::Base
   validates :question, presence: true
 
   default_scope { order(created_at: :desc) }
-  scope :sorted_by_updown, -> { reorder('up_count - down_count desc').order(created_at: :desc) }
   scope :tag, ->(tag) { where("tags like ?", "%#{tag}%") }
 
   def has_stand_of?(user)
@@ -49,8 +48,18 @@ class Poster < ActiveRecord::Base
     source.posters.where.not(id: self)
   end
 
+  def persisted_stands(choice = nil)
+    result = stands.latest.reject(&:new_record?)
+    result = result.select(&:"#{choice}?".to_sym) unless choice.nil?
+    result
+  end
+
   def self.tags
     self.all.map(&:tags).compact.join(' ').split.uniq
+  end
+
+  def self.sorted_by_stand_counts
+    all.sort_by { |p| p.stands.count }.reverse
   end
 
   private

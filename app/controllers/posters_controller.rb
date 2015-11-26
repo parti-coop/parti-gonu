@@ -2,7 +2,7 @@ class PostersController < ApplicationController
   include SlackNotifing
 
   def index
-    @posters = Poster.sorted_by_updown.all
+    @posters = Poster.sorted_by_stand_counts
     @posters = @posters.tag(params[:tag]) if params[:tag].present?
   end
 
@@ -22,10 +22,6 @@ class PostersController < ApplicationController
 
     has_stand = (user_signed_in? and @poster.has_stand_of?(current_user))
     @current_user_stand = (has_stand ? @poster.stand_of(current_user) : @poster.stands.build)
-    @persisted_stands = @poster.stands.latest.reject(&:new_record?)
-    @persisted_in_favor_stands = @persisted_stands.select(&:in_favor?)
-    @persisted_oppose_stands = @persisted_stands.select(&:oppose?)
-    @persisted_abstain_stands = @persisted_stands.select(&:abstain?)
   end
 
   def create
@@ -45,6 +41,26 @@ class PostersController < ApplicationController
       slack(@poster)
       redirect_to @poster
     end
+  end
+
+  def in_favor
+    @poster = Poster.find(params[:id])
+    @stand = @poster.stand_of(current_user) || @poster.stands.build
+    @stand.versions.build(choice: 'in_favor')
+    @stand.user = current_user if @stand.user.nil?
+    @stand.save
+
+    redirect_to @poster
+  end
+
+  def oppose
+    @poster = Poster.find(params[:id])
+    @stand = @poster.stand_of(current_user) || @poster.stands.build
+    @stand.versions.build(choice: 'oppose')
+    @stand.user = current_user if @stand.user.nil?
+    @stand.save
+
+    redirect_to @poster
   end
 
   def up

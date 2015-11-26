@@ -14,42 +14,57 @@
       = poster.question
 
     .vote_buttons.text-center
-      = link_to up_poster_path(poster), method: :put, class: 'btn btn-success btn-lg' do
+      = link_to in_favor_poster_path(poster), method: :put, class: "btn btn-success btn-lg #{'disabled' if !user_signed_in? or poster.stand_of(current_user).try(:choice) == 'in_favor'}" do
         %i.fa.fa-thumbs-up
-        %strong= poster.up_count
-      = link_to down_poster_path(poster), method: :put, class: 'btn btn-danger btn-lg' do
+        %strong= poster.persisted_stands('in_favor').count
+      = link_to oppose_poster_path(poster), method: :put, class: "btn btn-danger btn-lg #{'disabled' if !user_signed_in? or poster.stand_of(current_user).try(:choice) == 'oppose'}" do
         %i.fa.fa-thumbs-down
-        %strong= poster.down_count
-
-  - if current_page?(controller: :posters, action: :show, id: poster)
-    .panel-body
-      %h5
-        %i.glyphicon.glyphicon-random
-        같은 링크, 다른 토론 주제
-        = link_to '다른 주제로 토론하기', new_poster_path(source_id: poster.source), class: 'btn btn-sm btn-default'
-      %ul
-      - poster.same_sourced_posters.each do |the_other_poster|
-        - unless the_other_poster == poster
-          %li
-            = link_to the_other_poster.question, the_other_poster
-            %span.text-muted
-              \-
-              %i.glyphicon.glyphicon-user
-              = the_other_poster.user.email
-
-    .panel-body
-      %h5
-        %i.glyphicon.glyphicon-link
-        연결 대자보
-        = link_to '연결 대자보 만들기', new_poster_path(relating_poster_id: poster), class: 'btn btn-sm btn-default'
-      %ul
-      - poster.relatable_posters.each do |relatable|
-        %li
-          = link_to relatable.title, relatable
-          %span.text-muted
-            \-
-            %i.glyphicon.glyphicon-user
-            = relatable.user.email
+        %strong= poster.persisted_stands('oppose').count
+      %p
+        %a(type="button" data-toggle="collapse" data-target="#static" aria-expanded="false" aria-controls="collapseExample")
+          자세히 보기
+    - if user_signed_in? and poster.has_stand_of?(current_user)
+      %section.collapse#static
+        .panel.panel-default
+          .panel-body
+            %p
+              이 글을 읽고 #{poster.persisted_stands.count}분이 입장을 밝혀 주셨습니다.
+            %hr
+            - if poster.persisted_stands('in_favor').any? or poster.persisted_stands('oppose').any?
+              .row
+                .col-xs-2
+                  %span.label.label-in_favor
+                    in_favor
+                    \:
+                    = poster.persisted_stands('in_favor').count
+                .col-xs-3
+                  = poster.persisted_stands('in_favor').first(3).map { |s| s.user.email }.join(', ')
+                  = "..." if poster.persisted_stands('in_favor').count > 2
+                .col-xs-2
+                  .text-center VS
+                .col-xs-3
+                  = poster.persisted_stands('oppose').first(3).map { |s| s.user.email }.join(', ')
+                  = "..." if poster.persisted_stands('oppose').count > 3
+                .col-xs-2
+                  .pull-right
+                    %span.label.label-oppose
+                      = poster.persisted_stands('oppose').count
+                      \:
+                      oppose
+            - if (poster.persisted_stands('in_favor').any? or poster.persisted_stands('oppose').any?) and poster.persisted_stands('abstain').any?
+              %hr
+            - if poster.persisted_stands('abstain').any?
+              %span.label.label-abstain
+                abstain
+                \:
+                = poster.persisted_stands('abstain').count
+              %span(style='margin-left: 10px')
+                = poster.persisted_stands('abstain').first(3).map { |s| s.user.email }.join(', ')
+                = "..." if poster.persisted_stands('abstain').count > 2
+    - else
+      - if poster.persisted_stands.any?
+        %section.collapse#static
+          %p 이 글을 읽고 #{poster.persisted_stands.count}분이 입장을 밝혀 주셨습니다.
 
   .panel-footer
     .text-muted

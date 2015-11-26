@@ -9,7 +9,7 @@ body { padding-top: 120px; }
 }
 
 .label-in_favor {
-  @extend .label-primary;
+  @extend .label-success;
 }
 
 .label-oppose {

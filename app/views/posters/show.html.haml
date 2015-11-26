@@ -6,54 +6,11 @@
 %section
   = render @poster
 
-- if user_signed_in? and @poster.has_stand_of?(current_user)
-  %section
-    %h4 현황
-    %p
-      이 글을 읽고 #{@persisted_stands.count}분이 입장을 밝혀 주셨습니다.
-      %button.btn.btn-xs.btn-default(type="button" data-toggle="collapse" data-target="#static" aria-expanded="false" aria-controls="collapseExample")
-        자세히 보기
-    .panel.panel-default.collapse#static
-      .panel-body
-        - if @persisted_in_favor_stands.any? or @persisted_oppose_stands.any?
-          .row
-            .col-xs-5
-              %span.label.label-in_favor
-                in_favor
-                \:
-                = @persisted_in_favor_stands.count
-              .pull-right
-                = @persisted_in_favor_stands.first(3).map { |s| s.user.email }.join(', ')
-                = "..." if @persisted_in_favor_stands.count > 2
-            .col-xs-2
-              .text-center VS
-            .col-xs-5
-              = @persisted_oppose_stands.first(3).map { |s| s.user.email }.join(', ')
-              .pull-right
-                = "..." if @persisted_oppose_stands.count > 3
-                %span.label.label-oppose
-                  = @persisted_oppose_stands.count
-                  \:
-                  oppose
-        - if (@persisted_in_favor_stands.any? or @persisted_oppose_stands.any?) and @persisted_abstain_stands.any?
-          %hr
-        - if @persisted_abstain_stands.any?
-          %span.label.label-abstain
-            abstain
-            \:
-            = @persisted_abstain_stands.count
-          %span(style='margin-left: 10px')
-            = @persisted_abstain_stands.first(3).map { |s| s.user.email }.join(', ')
-            = "..." if @persisted_abstain_stands.count > 2
-- else
-  - if @persisted_stands.any?
-    %section
-      %h4 현황
-      %p 이 글을 읽고 #{@persisted_stands.count}분이 입장을 밝혀 주셨습니다.
 %section
-  %h4
-    입장
   - if user_signed_in? and @poster.has_stand_of?(current_user)
+    %h5
+      %i.glyphicon.glyphicon-check
+      입장
     %p
       내 입장은
       %span.label(class="label-#{@poster.stand_of(current_user).choice}")= @poster.stand_of(current_user).choice
@@ -64,7 +21,7 @@
 
   - if user_signed_in?
     - if @poster.has_stand_of?(current_user)
-      - stands = @persisted_stands.select{|s| s.reason.present? }.in_groups_of(3)
+      - stands = @poster.persisted_stands.select{|s| s.reason.present? }.in_groups_of(3)
       .row
         .col-md-4
           - stands.map(&:first).compact.each do |stand|
@@ -86,3 +43,34 @@
     %p 다른 사람들의 입장을 살펴 보시기 전에 먼저 로그인해 주세요.
     = link_to 'Log in', poster_path(@poster, auth: 1), class: 'btn btn-default'
 
+
+%hr
+
+%section
+  %h5
+    %i.glyphicon.glyphicon-random
+    같은 링크, 다른 토론 주제
+    = link_to '다른 주제로 토론하기', new_poster_path(source_id: @poster.source), class: 'btn btn-sm btn-default'
+  %ul
+  - @poster.same_sourced_posters.each do |the_other_poster|
+    - unless the_other_poster == @poster
+      %li
+        = link_to the_other_poster.question, the_other_poster
+        %span.text-muted
+          \-
+          %i.glyphicon.glyphicon-user
+          = the_other_poster.user.email
+
+%section
+  %h5
+    %i.glyphicon.glyphicon-link
+    연결 대자보
+    = link_to '연결 대자보 만들기', new_poster_path(relating_poster_id: @poster), class: 'btn btn-sm btn-default'
+  %ul
+  - @poster.relatable_posters.each do |relatable|
+    %li
+      = link_to relatable.title, relatable
+      %span.text-muted
+        \-
+        %i.glyphicon.glyphicon-user
+        = relatable.user.email

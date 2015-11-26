@@ -6,4 +6,4 @@
 .form-group
   = f.text_area :reason, value: (previous_version.reason if previous_version.present?), cols: 100, rows: 5, class: 'form-control', placeholder: '왜냐하면...'
 .form-group
-  = f.submit
+  = f.submit '입장을 밝힙니다'

@@ -14,6 +14,9 @@ class StandsController < ApplicationController
     @stand = Stand.find(params[:id])
   end
 
+  def oppose
+  end
+
   def create
     @poster = Poster.find(params[:poster_id])
     @stand = @poster.stands.build(create_params)
