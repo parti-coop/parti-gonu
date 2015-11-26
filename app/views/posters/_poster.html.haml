@@ -20,44 +20,54 @@
       = link_to oppose_poster_path(poster), method: :put, class: "btn btn-danger btn-lg #{'disabled' if !user_signed_in? or poster.stand_of(current_user).try(:choice) == 'oppose'}" do
         %i.fa.fa-thumbs-down
         %strong= poster.persisted_stands('oppose').count
-      %p
-        %a(type="button" data-toggle="collapse" data-target="#static" aria-expanded="false" aria-controls="collapseExample")
-          자세히 보기
+      - if user_signed_in? and poster.has_stand_of?(current_user)
+        %p
+          %a(type="button" data-toggle="collapse" data-target="##{dom_id(poster)}--stat" aria-expanded="false" aria-controls="#{dom_id(poster)}--stat")
+            자세히 보기
     - if user_signed_in? and poster.has_stand_of?(current_user)
-      %section.collapse#static
+      %section.collapse(id="#{dom_id(poster)}--stat")
         .panel.panel-default
           .panel-body
             %p
               이 글을 읽고 #{poster.persisted_stands.count}분이 입장을 밝혀 주셨습니다.
-            %hr
             - if poster.persisted_stands('in_favor').any? or poster.persisted_stands('oppose').any?
-              .row
-                .col-xs-2
-                  %span.label.label-in_favor
-                    in_favor
-                    \:
-                    = poster.persisted_stands('in_favor').count
-                .col-xs-3
-                  = poster.persisted_stands('in_favor').first(3).map { |s| s.user.email }.join(', ')
-                  = "..." if poster.persisted_stands('in_favor').count > 2
-                .col-xs-2
-                  .text-center VS
-                .col-xs-3
-                  = poster.persisted_stands('oppose').first(3).map { |s| s.user.email }.join(', ')
-                  = "..." if poster.persisted_stands('oppose').count > 3
-                .col-xs-2
-                  .pull-right
-                    %span.label.label-oppose
-                      = poster.persisted_stands('oppose').count
-                      \:
-                      oppose
+              %hr
+              .row.text-center
+                .col-md-5
+                  .row
+                    .col-md-12.bg-success
+                      %strong
+                        in_favor
+                        &nbsp;
+                        = poster.persisted_stands('in_favor').count
+                        명
+                  .row
+                    .col-md-12
+                      = poster.persisted_stands('in_favor').first(3).map { |s| s.user.email }.join(', ')
+                      = "..." if poster.persisted_stands('in_favor').count > 3
+                .col-md-2
+                  %strong VS
+                .col-md-5
+                  .row
+                    .col-md-12.bg-danger
+                      %strong
+                        = poster.persisted_stands('oppose').count
+                        명
+                        &nbsp;
+                        oppose
+                  .row
+                    .col-md-12
+                      = poster.persisted_stands('oppose').first(3).map { |s| s.user.email }.join(', ')
+                      = "..." if poster.persisted_stands('oppose').count > 3
+
             - if (poster.persisted_stands('in_favor').any? or poster.persisted_stands('oppose').any?) and poster.persisted_stands('abstain').any?
               %hr
             - if poster.persisted_stands('abstain').any?
               %span.label.label-abstain
                 abstain
-                \:
+                &nbsp;
                 = poster.persisted_stands('abstain').count
+                명
               %span(style='margin-left: 10px')
                 = poster.persisted_stands('abstain').first(3).map { |s| s.user.email }.join(', ')
                 = "..." if poster.persisted_stands('abstain').count > 2
