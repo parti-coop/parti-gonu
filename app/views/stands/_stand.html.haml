@@ -47,5 +47,6 @@
         - if status.present?
           = render partial: status, locals: { stand: stand }
 
-  .panel-footer
-    = link_to '자세히 보기>>', stand
+  - unless current_page?(controller: :stands, action: :show, id: stand)
+    .panel-footer
+      = link_to '자세히 보기>>', stand
