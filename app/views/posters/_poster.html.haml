@@ -3,14 +3,11 @@
     %h4
       = link_to_if !current_page?(controller: :posters, action: :show, id: poster), poster.title, poster
       %small= link_to truncate(poster.url), poster.url
-
-  .panel-body
-    %p.lead
+    .text-muted
       = poster.description
       = link_to "[더보기]", poster.url
-
+  .panel-body
     %p.lead
-      %i.fa.fa-bullhorn
       = poster.question
 
     .vote_buttons.text-center
