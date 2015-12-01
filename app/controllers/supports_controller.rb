@@ -5,11 +5,13 @@ class SupportsController < ApplicationController
     @target = Stand.find params[:target_id]
     @poster = @target.poster
     unless @poster.has_stand_of?(current_user)
-      flash[:error] = "#{current_user.email}의 입장이 없습니다."
-      redirect_to @poster and return
+      # flash[:error] = "#{current_user.email}의 의견이 없습니다."
+      # redirect_to @poster and return
+      @stand = @poster.stands.build({versions_attributes: {'0': { choice: 'abstain' }}})
+      @stand.user = current_user
+    else
+      @stand = @poster.stand_of(current_user)
     end
-
-    @stand = @poster.stand_of(current_user)
     @support = @stand.supports.build(target: @target)
     @stand.save!
 

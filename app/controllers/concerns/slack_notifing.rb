@@ -20,7 +20,7 @@ module SlackNotifing
 
       return <<EOF
 대자보 #{poster.url} \"#{poster.question}\"
-#{stand.user.email}의 입장에 대해 #{object.user.email}이 댓글을 남겼습니다.
+#{stand.user.email}의 의견에 대해 #{object.user.email}이 댓글을 남겼습니다.
 #{object.body} >>> [보기](#{stand_url stand})
 EOF
     when "posters#create"
@@ -32,25 +32,25 @@ EOF
       poster = object.poster
       return <<EOF
 대자보 #{poster.url} \"#{poster.question}\"
-#{object.user.email}이 입장을 밝혔습니다. >>> [보기](#{stand_url object})
+#{object.user.email}이 의견을 밝혔습니다. >>> [보기](#{stand_url object})
 EOF
     when "stands#update"
       poster = object.poster
       return <<EOF
 대자보 #{poster.url} \"#{poster.question}\"
-#{object.user.email}이 입장을 고쳤습니다. >>> [보기](#{stand_url object})
+#{object.user.email}이 의견을 고쳤습니다. >>> [보기](#{stand_url object})
 EOF
     when "supports#create"
       poster = object.target.poster
       return <<EOF
 대자보 #{poster.url} \"#{poster.question}\"
-#{object.stand.user.email}이 #{object.target.user.email}입장을 지지합니다. >>> [보기](#{stand_url object.target})
+#{object.stand.user.email}이 #{object.target.user.email}의견을 지지합니다. >>> [보기](#{stand_url object.target})
 EOF
     when "supports#destroy"
       poster = object.target.poster
       return <<EOF
 대자보 #{poster.url} \"#{poster.question}\"
-#{object.stand.user.email}이 #{object.target.user.email}입장에 대해 지지철회합니다. >>> [보기](#{stand_url object.target})
+#{object.stand.user.email}이 #{object.target.user.email}의견에 대해 지지철회합니다. >>> [보기](#{stand_url object.target})
 EOF
     else
       nil

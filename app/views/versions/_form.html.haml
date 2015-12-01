@@ -1,9 +1,10 @@
+/ .form-group
+/   = f.collection_radio_buttons :choice, Version.choices, :first, :first do |b|
+/     = b.label(class: 'radio-inline') do
+/       = b.radio_button checked: (previous_version.present? and previous_version.choice == b.value)
+/       = b.text
+= f.hidden_field :choice, value: (previous_version.try(:choice) || 'abstain')
 .form-group
-  = f.collection_radio_buttons :choice, Version.choices, :first, :first do |b|
-    = b.label(class: 'radio-inline') do
-      = b.radio_button checked: (previous_version.present? and previous_version.choice == b.value)
-      = b.text
+  = f.text_area :reason, value: (previous_version.reason if previous_version.present?), cols: 100, rows: 5, class: 'form-control', placeholder: '내 의견은...'
 .form-group
-  = f.text_area :reason, value: (previous_version.reason if previous_version.present?), cols: 100, rows: 5, class: 'form-control', placeholder: '왜냐하면...'
-.form-group
-  = f.submit '입장을 밝힙니다'
+  = f.submit '의견을 밝힙니다'

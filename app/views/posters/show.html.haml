@@ -7,59 +7,55 @@
   = render @poster
 
 %section
-  - if user_signed_in? and @poster.has_stand_of?(current_user)
-    %h5
-      %i.glyphicon.glyphicon-check
-      입장
-    %p
-      내 입장은
-      %span.label(class="label-#{@poster.stand_of(current_user).choice}")= @poster.stand_of(current_user).choice
-      입니다.
-      - if @poster.stand_of(current_user).reason.present?
-        = link_to '보기', @poster.stand_of(current_user), class: 'btn btn-xs btn-default'
-      = link_to '다듬기/바꾸기', edit_stand_path(@poster.stand_of(current_user)), class: 'btn btn-default btn-xs'
+  - if user_signed_in?
+    .well
+      %h4
+        - if @poster.has_stand_of?(current_user)
+          .pull-right
+            %small
+              = link_to '내 의견 보기 >', @poster.stand_of(current_user)
+          .label.label-info
+            %i.fa.fa-users
+            사람들의 의견
+            = @poster.persisted_stands.count
 
   - if user_signed_in?
-    - if @poster.has_stand_of?(current_user)
-      - stands = @poster.persisted_stands.select{|s| s.reason.present? }.in_groups_of(3)
-      .row
-        .col-md-4
-          - stands.map(&:first).compact.each do |stand|
-            = render stand
-        .col-md-4
-          - stands.map(&:second).compact.each do |stand|
-            = render stand
-        .col-md-4
-          - stands.map(&:last).compact.each do |stand|
-            = render stand
-    - else
+    - stands = @poster.persisted_stands.in_groups_of(3)
+    .row
+      .col-md-4
+        - stands.map(&:first).compact.each do |stand|
+          = render stand
+      .col-md-4
+        - stands.map(&:second).compact.each do |stand|
+          = render stand
+      .col-md-4
+        - stands.map(&:last).compact.each do |stand|
+          = render stand
+    - unless @poster.has_stand_of?(current_user)
       %p
-        다른 사람들의 입장을 살펴 보시기 전에 먼저
-        - if user_signed_in?
-          #{current_user.email}님의
-        입장을 밝혀 주세요.
+        #{current_user.email}님의 의견을 밝혀 주세요.
         = render partial: 'stands/form', locals: {stand: @current_user_stand}
   - else
-    %p 다른 사람들의 입장을 살펴 보시기 전에 먼저 로그인해 주세요.
+    %p 다른 사람들의 의견을 살펴 보시기 전에 먼저 로그인해 주세요.
     = link_to 'Log in', poster_path(@poster, auth: 1), class: 'btn btn-default'
 
 
 %hr
 
-%section
-  %h5
-    %i.glyphicon.glyphicon-random
-    같은 링크, 다른 토론 주제
-    = link_to '다른 주제로 토론하기', new_poster_path(source_id: @poster.source), class: 'btn btn-sm btn-default'
-  %ul
-  - @poster.same_sourced_posters.each do |the_other_poster|
-    - unless the_other_poster == @poster
-      %li
-        = link_to the_other_poster.question, the_other_poster
-        %span.text-muted
-          \-
-          %i.glyphicon.glyphicon-user
-          = the_other_poster.user.email
+/ %section
+/   %h5
+/     %i.glyphicon.glyphicon-random
+/     같은 링크, 다른 토론 주제
+/     = link_to '다른 주제로 토론하기', new_poster_path(source_id: @poster.source), class: 'btn btn-sm btn-default'
+/   %ul
+/   - @poster.same_sourced_posters.each do |the_other_poster|
+/     - unless the_other_poster == @poster
+/       %li
+/         = link_to the_other_poster.question, the_other_poster
+/         %span.text-muted
+/           \-
+/           %i.glyphicon.glyphicon-user
+/           = the_other_poster.user.email
 
 %section
   %h5

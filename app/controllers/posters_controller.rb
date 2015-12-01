@@ -4,7 +4,6 @@ class PostersController < ApplicationController
   def index
     @posters = Poster.all
     @posters = @posters.by_tag(params[:tag]) if params[:tag].present?
-    @posters = @posters.sort_by { |p| p.stands.count }.reverse
   end
 
   def new
@@ -64,17 +63,15 @@ class PostersController < ApplicationController
     redirect_to @poster
   end
 
-  def up
+  def like
     @poster = Poster.find(params[:id])
-    @poster.up_count += 1
-    @poster.save!
+    current_user.likes @poster
     redirect_to root_path
   end
 
-  def down
+  def dislike
     @poster = Poster.find(params[:id])
-    @poster.down_count += 1
-    @poster.save!
+    current_user.dislikes @poster
     redirect_to root_path
   end
   private

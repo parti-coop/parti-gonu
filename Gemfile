@@ -18,6 +18,7 @@ gem 'bootswatch-rails'
 gem 'link_thumbnailer', '~> 3.1'
 gem 'envyable', '~> 0.2.0'
 gem 'slack-notifier', '~> 1.4'
+gem 'acts_as_votable', '~> 0.10.0'
 
 group :development, :test do
   gem 'byebug'

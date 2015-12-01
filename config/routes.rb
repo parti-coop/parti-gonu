@@ -5,8 +5,8 @@ Rails.application.routes.draw do
   shallow do
     resources :posters do
       member do
-        put :up
-        put :down
+        patch :like
+        patch :dislike
         put :in_favor
         put :oppose
       end

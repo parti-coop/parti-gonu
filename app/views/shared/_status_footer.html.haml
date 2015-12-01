@@ -1,9 +1,9 @@
 .text-muted
-  - if choicable.present?
-    - if local_assigns[:previous_choicable].present?
-      %span.label(class="label-#{previous_choicable.choice}")= previous_choicable.choice
-      %i.glyphicon.glyphicon-arrow-right
-    %span.label(class="label-#{choicable.choice}")= choicable.choice
+  / - if choicable.present?
+  /   - if local_assigns[:previous_choicable].present?
+  /     %span.label(class="label-#{previous_choicable.choice}")= previous_choicable.choice
+  /     %i.glyphicon.glyphicon-arrow-right
+  /   %span.label(class="label-#{choicable.choice}")= choicable.choice
   %i.glyphicon.glyphicon-user
   = object.user.email
   %i.glyphicon.glyphicon-time

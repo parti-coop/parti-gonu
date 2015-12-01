@@ -8,12 +8,12 @@ class Poster < ActiveRecord::Base
   has_many :relateds, class_name: Relatable, foreign_key: :relating_id
   has_many :relating_posters, through: :relatings, source: :relating
   has_many :related_posters, through: :relateds, source: :related
-
+  acts_as_votable
   accepts_nested_attributes_for :relatings
 
   validates :question, presence: true
 
-  default_scope { order(created_at: :desc) }
+  default_scope { order(cached_votes_score: :desc).order(created_at: :desc) }
   scope :by_tag, ->(tag) { where("tags like ?", "%#{tag}%") }
 
   def has_stand_of?(user)
@@ -52,6 +52,16 @@ class Poster < ActiveRecord::Base
     result = stands.latest.reject(&:new_record?)
     result = result.select(&:"#{choice}?".to_sym) unless choice.nil?
     result
+  end
+
+  def likable_by(user)
+    return false if user.nil?
+    !user.liked?(self)
+  end
+
+  def dislikable_by(user)
+    return false if user.nil?
+    !user.disliked?(self)
   end
 
   def self.tags

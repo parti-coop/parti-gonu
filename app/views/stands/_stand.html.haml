@@ -2,7 +2,7 @@
   .panel-heading
     .text-muted.pull-right
       - if current_user == stand.user
-        = link_to '입장 다듬기/바꾸기', edit_stand_path(stand), class: 'btn btn-default btn-xs'
+        = link_to '의견 다듬기', edit_stand_path(stand), class: 'btn btn-default btn-xs'
       - else
         - if !stand.supported?(current_user)
           = link_to supports_path(target_id: stand), method: :post, class: 'btn btn-default btn-xs' do
@@ -12,10 +12,10 @@
           = link_to support_path(stand.supported(current_user)), method: :delete, class: 'btn btn-default btn-xs' do
             지지철회
             %span.badge= stand.supporteds.count
-    - if stand.current_version.change_choice?
-      %span.label(class="label-#{stand.previous_version.choice}")= stand.previous_version.choice
-      %i.glyphicon.glyphicon-arrow-right
-    %span.label(class="label-#{stand.choice}")= stand.choice
+    / - if stand.current_version.change_choice?
+    /   %span.label(class="label-#{stand.previous_version.choice}")= stand.previous_version.choice
+    /   %i.glyphicon.glyphicon-arrow-right
+    / %span.label(class="label-#{stand.choice}")= stand.choice
     .user
       %i.glyphicon.glyphicon-user
       = stand.user.email
@@ -26,15 +26,17 @@
     - if stand.supports.any?
       %h6
         %i.glyphicon.glyphicon-hand-down
-        지지입장
-      - stand.supports.each do |support|
-        = link_to support.target, style: 'text-decoration: none' do
-          %span.label(class="label-#{support.target.choice}")= support.target.choice
-          - if support.target.reason.present?
-            "#{truncate(support.target.reason)}"
-          %span.text-muted
-            %i.glyphicon.glyphicon-user
-            = support.target.user.email
+        아래 의견을 지지합니다.
+      %ul
+        - stand.supports.each do |support|
+          %li
+            = link_to support.target, style: 'text-decoration: none' do
+              / %span.label(class="label-#{support.target.choice}")= support.target.choice
+              - if support.target.reason.present?
+                "#{truncate(support.target.reason)}"
+              %span.text-muted
+                %i.glyphicon.glyphicon-user
+                = support.target.user.email
 
   %ul.list-group
     %li.list-group-item

@@ -13,11 +13,12 @@
             - else
               .text-muted http://까지 넣어주세요.
               = f.text_field :url, class: 'form-control'
-          .form-group
-            = f.label :question do
-              의견
-            .text-muted 위에 링크에 대한 의견이나 토론 주제를 써주세요.
-            = f.text_area :question, class: 'form-control'
+          / .form-group
+          /   = f.label :question do
+          /     의견
+          /   .text-muted 위에 링크에 대한 의견이나 토론 주제를 써주세요.
+          /   = f.text_area :question, class: 'form-control'
+          = f.hidden_field :question, value: 'none'
           .form-group
             = f.label :tags, '태그'
             .text-muted 위 링크와 연관된 태그를 넣어 주세요. 여러 태그를 넣을 때는 빈 공백을 넣어 주세요.

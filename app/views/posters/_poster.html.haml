@@ -1,77 +1,31 @@
 .panel.panel-default
   .panel-heading
+    %span.fa-stack.pull-left
+      = link_to like_poster_path(poster), method: :patch, class: "btn btn-success btn-xs #{'disabled' unless poster.likable_by(current_user)}" do
+        %i.fa.fa-chevron-up
+          = poster.get_likes.size
+      = link_to dislike_poster_path(poster), method: :patch, class: "btn btn-danger btn-xs #{'disabled' unless poster.dislikable_by(current_user)}" do
+        %i.fa.fa-chevron-down
+          = poster.get_dislikes.size
     %h4
+      &nbsp;
       = link_to_if !current_page?(controller: :posters, action: :show, id: poster), poster.title, poster
       %small= link_to truncate(poster.url), poster.url
-    .text-muted
-      = poster.description
-      = link_to "[더보기]", poster.url
-  .panel-body
-    %p.lead
-      = poster.question
 
-    .vote_buttons.text-center
-      = link_to in_favor_poster_path(poster), method: :put, class: "btn btn-success btn-lg #{'disabled' if !user_signed_in? or poster.stand_of(current_user).try(:choice) == 'in_favor'}" do
-        %i.fa.fa-thumbs-up
-        %strong= poster.persisted_stands('in_favor').count
-      = link_to oppose_poster_path(poster), method: :put, class: "btn btn-danger btn-lg #{'disabled' if !user_signed_in? or poster.stand_of(current_user).try(:choice) == 'oppose'}" do
-        %i.fa.fa-thumbs-down
-        %strong= poster.persisted_stands('oppose').count
-      - if user_signed_in? and poster.has_stand_of?(current_user)
-        %p
-          %a(type="button" data-toggle="collapse" data-target="##{dom_id(poster)}--stat" aria-expanded="false" aria-controls="#{dom_id(poster)}--stat")
-            자세히 보기
-    - if user_signed_in? and poster.has_stand_of?(current_user)
-      %section.collapse(id="#{dom_id(poster)}--stat")
-        .panel.panel-default
-          .panel-body
-            %p
-              이 글을 읽고 #{poster.persisted_stands.count}분이 입장을 밝혀 주셨습니다.
-            - if poster.persisted_stands('in_favor').any? or poster.persisted_stands('oppose').any?
-              %hr
-              .row.text-center
-                .col-md-5
-                  .row
-                    .col-md-12.bg-success
-                      %strong
-                        in_favor
-                        &nbsp;
-                        = poster.persisted_stands('in_favor').count
-                        명
-                  .row
-                    .col-md-12
-                      = poster.persisted_stands('in_favor').first(3).map { |s| s.user.email }.join(', ')
-                      = "..." if poster.persisted_stands('in_favor').count > 3
-                .col-md-2
-                  %strong VS
-                .col-md-5
-                  .row
-                    .col-md-12.bg-danger
-                      %strong
-                        = poster.persisted_stands('oppose').count
-                        명
-                        &nbsp;
-                        oppose
-                  .row
-                    .col-md-12
-                      = poster.persisted_stands('oppose').first(3).map { |s| s.user.email }.join(', ')
-                      = "..." if poster.persisted_stands('oppose').count > 3
+  - if poster.description.present? or !current_page?(controller: :posters, action: :show, id: poster)
+    .panel-body
+      - if poster.description.present?
+        %p.lead
+          = poster.description
+          = link_to "[더보기]", poster.url
 
-            - if (poster.persisted_stands('in_favor').any? or poster.persisted_stands('oppose').any?) and poster.persisted_stands('abstain').any?
-              %hr
-            - if poster.persisted_stands('abstain').any?
-              %span.label.label-abstain
-                abstain
-                &nbsp;
-                = poster.persisted_stands('abstain').count
-                명
-              %span(style='margin-left: 10px')
-                = poster.persisted_stands('abstain').first(3).map { |s| s.user.email }.join(', ')
-                = "..." if poster.persisted_stands('abstain').count > 2
-    - else
-      - if poster.persisted_stands.any?
-        %section.collapse#static
-          %p 이 글을 읽고 #{poster.persisted_stands.count}분이 입장을 밝혀 주셨습니다.
+      - unless current_page?(controller: :posters, action: :show, id: poster)
+        .text-center
+          = link_to poster do
+            %h4
+              .label.label-info
+                %i.fa.fa-users
+                = poster.persisted_stands.count
 
   .panel-footer.text-muted
     %ul.list-inline(style='margin-bottom: 0px;')
