@@ -4,6 +4,7 @@ class CreateComments < ActiveRecord::Migration
       t.text :body
       t.references :version, null: false, index: true
       t.timestamps null: false
+      t.references :user, index: true, null: false
     end
 
     remove_column :versions, :comment, :text

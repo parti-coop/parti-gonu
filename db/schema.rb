@@ -14,38 +14,36 @@
 ActiveRecord::Schema.define(version: 20151201210656) do
 
   create_table "comments", force: :cascade do |t|
-    t.text     "body",       limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.integer  "stand_id",   limit: 4
-    t.integer  "user_id",    limit: 4
+    t.text     "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "user_id",    null: false
+    t.integer  "stand_id"
   end
 
   add_index "comments", ["stand_id"], name: "index_comments_on_stand_id"
   add_index "comments", ["user_id"], name: "index_comments_on_user_id"
 
   create_table "posters", force: :cascade do |t|
-    t.string   "url",                     limit: 255
-    t.integer  "user_id",                 limit: 4,                   null: false
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
-    t.text     "title",                   limit: 65535
-    t.text     "description",             limit: 65535
-    t.string   "image",                   limit: 255
-    t.text     "question",                                            null: false
+    t.string   "url"
+    t.integer  "user_id",                               null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.text     "title"
+    t.text     "description"
+    t.string   "image"
+    t.text     "question"
     t.integer  "source_id"
-    t.integer  "up",                                    default: 0
-    t.integer  "down",                                  default: 0
-    t.integer  "up_count",                              default: 0
-    t.integer  "down_count",                            default: 0
+    t.integer  "up_count",                default: 0
+    t.integer  "down_count",              default: 0
     t.string   "tags"
-    t.integer  "cached_votes_total",                    default: 0
-    t.integer  "cached_votes_score",                    default: 0
-    t.integer  "cached_votes_up",                       default: 0
-    t.integer  "cached_votes_down",                     default: 0
-    t.integer  "cached_weighted_score",                 default: 0
-    t.integer  "cached_weighted_total",                 default: 0
-    t.float    "cached_weighted_average",               default: 0.0
+    t.integer  "cached_votes_total",      default: 0
+    t.integer  "cached_votes_score",      default: 0
+    t.integer  "cached_votes_up",         default: 0
+    t.integer  "cached_votes_down",       default: 0
+    t.integer  "cached_weighted_score",   default: 0
+    t.integer  "cached_weighted_total",   default: 0
+    t.float    "cached_weighted_average", default: 0.0
   end
 
   add_index "posters", ["cached_votes_down"], name: "index_posters_on_cached_votes_down"
@@ -60,10 +58,10 @@ ActiveRecord::Schema.define(version: 20151201210656) do
   add_index "posters", ["user_id"], name: "index_posters_on_user_id"
 
   create_table "relatables", force: :cascade do |t|
-    t.integer  "relating_id", limit: 4, null: false
-    t.integer  "related_id",  limit: 4, null: false
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.integer  "relating_id", null: false
+    t.integer  "related_id",  null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   add_index "relatables", ["related_id"], name: "index_relatables_on_related_id"
@@ -81,51 +79,51 @@ ActiveRecord::Schema.define(version: 20151201210656) do
   add_index "sources", ["url"], name: "index_sources_on_url", unique: true
 
   create_table "stands", force: :cascade do |t|
-    t.integer  "user_id",    limit: 4, null: false
-    t.integer  "poster_id",  limit: 4, null: false
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.integer  "choice",     limit: 4
+    t.integer  "user_id",    null: false
+    t.integer  "poster_id",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "choice"
   end
 
   add_index "stands", ["poster_id", "user_id"], name: "index_stands_on_poster_id_and_user_id", unique: true
   add_index "stands", ["user_id"], name: "index_stands_on_user_id"
 
   create_table "supports", force: :cascade do |t|
-    t.integer  "stand_id",   limit: 4, null: false
-    t.integer  "target_id",  limit: 4, null: false
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.integer  "stand_id",   null: false
+    t.integer  "target_id",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "supports", ["stand_id", "target_id"], name: "index_supports_on_stand_id_and_target_id", unique: true
   add_index "supports", ["target_id"], name: "index_supports_on_target_id"
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
-    t.string   "reset_password_token",   limit: 255
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
   create_table "versions", force: :cascade do |t|
-    t.integer  "choice",      limit: 4,     null: false
-    t.integer  "stand_id",    limit: 4,     null: false
-    t.integer  "previous_id", limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.text     "reason",      limit: 65535
+    t.integer  "choice",      null: false
+    t.integer  "stand_id",    null: false
+    t.integer  "previous_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.text     "reason"
   end
 
   add_index "versions", ["previous_id"], name: "index_versions_on_previous_id"
